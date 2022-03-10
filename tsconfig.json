@@ -7,35 +7,43 @@
     "dist/**/*"
   ],
   "compilerOptions": {
-    "target": "esnext",                             /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', 'ES2021', or 'ESNEXT'. */
-    "module": "commonjs",                             /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */
+    "target": "esnext",
+    "module": "esnext",
     "lib": [
-      "es2020"
-    ],                                              /* Specify library files to be included in the compilation. */
+      "dom",
+      "esnext"
+    ],
     "typeRoots": [
       "node_modules/@types"
     ],
-    "allowJs": true,                               /* Allow javascript files to be compiled. */
-    "jsx": "preserve",                              /* Specify JSX code generation: 'preserve', 'react-native', 'react', 'react-jsx' or 'react-jsxdev'. */
-    "declaration": true,                            /* Generates corresponding '.d.ts' file. */
-    "declarationMap": true,                         /* Generates a sourcemap for each corresponding '.d.ts' file. */
-    "sourceMap": true,                              /* Generates corresponding '.map' file. */
-    "outDir": "dist",                               /* Redirect output structure to the directory. */
-    "rootDir": "src",                               /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
-    "strict": true,                                 /* Enable all strict type-checking options. */
-    "noImplicitAny": true,                          /* Raise error on expressions and declarations with an implied 'any' type. */
-    "noImplicitThis": true,                         /* Raise error on 'this' expressions with an implied 'any' type. */
-    "alwaysStrict": true,                           /* Parse in strict mode and emit "use strict" for each source file. */
-    "noUnusedLocals": true,                         /* Report errors on unused locals. */
-    "noUnusedParameters": true,                     /* Report errors on unused parameters. */
-    "noImplicitReturns": true,                      /* Report error when not all code paths in function return a value. */
-    "noFallthroughCasesInSwitch": true,             /* Report errors for fallthrough cases in switch statement. */
-    //"noUncheckedIndexedAccess": true,               /* Include 'undefined' in index signature results */
-    "noImplicitOverride": true,                     /* Ensure overriding members in derived classes are marked with an 'override' modifier. */
-    "moduleResolution": "node",                     /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
-    "esModuleInterop": true,                        /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
-    "resolveJsonModule": true,                      /* Include modules imported with '.json' extension */
-    "skipLibCheck": true,                           /* Skip type checking of declaration files. */
-    "forceConsistentCasingInFileNames": true        /* Disallow inconsistently-cased references to the same file. */
+    "importHelpers": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "jsx": "react",
+    "outDir": "dist",
+    "rootDir": "src",
+    "baseUrl": ".",
+    "strict": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "utility": [
+        "test/utility/index.ts"
+      ],
+      "@adaburrows/graphlib": [
+        "dist/index.js"
+      ]
+    }
   }
 }

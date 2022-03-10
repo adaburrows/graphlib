@@ -8,19 +8,24 @@
     "url": "https://github.com/adaburrows/graphlib/issues"
   },
   "homepage": "https://github.com/adaburrows/graphlib#readme",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "files": [
-    "dist/",
+    "dist",
+    "src",
     "README.md"
   ],
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "engines": {
+    "node": ">=10"
+  },
   "scripts": {
-    "build": "tsc --project tsconfig.json",
-    "lint": "eslint . --ignore-path .gitignore --ext .ts",
+    "build": "npx tsc --project tsconfig.json",
+    "lint": "npx eslint . --ignore-path .gitignore --ext .ts",
     "lint:fix": "npm run lint -- --fix",
-    "test": "web-test-runner src/**/*.spec.ts",
+    "test": "npx jest",
     "test:ci": "npm test",
-    "test:watch": "npm test -- --watch --verbose"
+    "test:watch": "npm test -- --watch --verbose",
+    "clean": "rm -rf ./dist"
   },
   "repository": {
     "type": "git",
@@ -30,23 +35,18 @@
     "graph",
     "topology",
     "graph traversal",
-    "matrix"
+    "matrix",
+    "spectral graph theory"
   ],
   "devDependencies": {
-    "@esm-bundle/chai": "^4.3.4-fix.0",
-    "@types/chai": "^4.2.21",
-    "@types/expect": "^24.3.0",
-    "@types/jasmine": "^3.8.2",
-    "@typescript-eslint/eslint-plugin": "^4.29.2",
-    "@typescript-eslint/parser": "^4.29.2",
-    "@web/dev-server": "0.1.30",
-    "@web/dev-server-esbuild": "0.2.16",
-    "@web/test-runner": "0.13.27",
-    "@web/test-runner-puppeteer": "^0.10.5",
-    "esbuild": "^0.11.23",
+    "@types/jest": "^27.4.1",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
     "eslint": "^7.32.0",
-    "jasmine": "^4.0.2",
-    "jasmine-spec-reporter": "^7.0.0",
+    "jest": "^27.5.1",
+    "ts-jest": "^27.1.3",
+    "tsconfig-paths": "^3.13.0",
+    "tslib": "^2.3.1",
     "typescript": "^4.6.2"
   }
 }

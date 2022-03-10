@@ -1,5 +1,4 @@
-import { expect } from '@esm-bundle/chai';
-import { } from "./graph";
+import { } from "../../src";
 
 /**
  * Number of nodes
@@ -106,6 +105,9 @@ const G3 = [[1, 3], [2, 3], [3, 4]];
 const G4 = [[1, 4], [2, 3], [3, 4]];
 
 const G_line = [[1, 2], [2, 3], [3, 4], [4, 5]];
+
+
+console.log(N, A, G, G_merge_4_6, G_rule1, G_rule2, G_rule3, G1, G2, G3, G4, G_line);
 
 
 // console.log(N === find_n(G));
