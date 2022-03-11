@@ -1,23 +1,5 @@
 import { IVertex } from './vertex';
 
-/*
-
-If we reduce the graph to primitives, we can see that it is really just a set
-of sets. A hyperedge has up to two sets. An edge in a graph has two elements.
-The graph itself has a set of those sets. This implementation allows us to see
-that the underlying type is the same across all edges.
-
-We can see that each type of graph is really just a more restricted form of
-a hypergraph, with graphs being 2-uniform hypergraphs (each edge of size 2).
-
-*/
-
-/**
- * Internally, we represent everything as a set of sets, which allows a simple
- * map from graph to hypergraph.
- */
-export type VertexSetSet = VertexSet[];
-
 /**
  * Edges and Arcs have only pair of vertices per edge.
  */
@@ -27,6 +9,12 @@ export type VertexPair = [IVertex, IVertex];
  * Hypergraphs can have up to two vertex sets per edge.
  */
 export type VertexSet = IVertex[];
+
+/**
+ * Internally, we represent everything as a set of sets, which allows a simple
+ * map from graph to hypergraph.
+ */
+ export type VertexSetSet = VertexSet[];
 
 /**
  * Interface for edges.
@@ -61,7 +49,7 @@ export abstract class Edge implements IEdge{
  *   oriented directed edges,
  *   and oriented directed hyperedges
  */
-export class Undirected extends Edge {
+export class UndirectedEdge extends Edge {
   constructor(vertex_pair: VertexPair) {
     super();
     this.vertices[0] = vertex_pair;
@@ -86,15 +74,15 @@ export class Undirected extends Edge {
   /**
    * Returns a right oriented directed edge: x --> y
    */
-  public toRight(): Directed {
-    return new Directed([this.x, this.y]);
+  public toRight(): DirectedEdge {
+    return new DirectedEdge([this.x, this.y]);
   }
 
   /**
    * Returns a left oriented directed edge: x <-- y
    */
-  public toLeft(): Directed {
-    return new Directed([this.y, this.x]);
+  public toLeft(): DirectedEdge {
+    return new DirectedEdge([this.y, this.x]);
   }
 
   /**
@@ -123,7 +111,7 @@ export class Undirected extends Edge {
  * Directed edge:
  *   Has morphisms h and t mapping to vertex elements.
  */
-export class Directed extends Edge {
+export class DirectedEdge extends Edge {
   constructor(vertex_pair: VertexPair) {
     super();
     this.vertices[0] = vertex_pair;
@@ -155,8 +143,8 @@ export class Directed extends Edge {
   /**
    * Returns an undirected edge.
    */
-  public toUndirected(): Undirected {
-    return new Undirected([this.h, this.t]);
+  public toUndirected(): UndirectedEdge {
+    return new UndirectedEdge([this.h, this.t]);
   }
 }
 

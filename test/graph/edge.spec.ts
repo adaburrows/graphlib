@@ -1,7 +1,7 @@
 import {
   KeyVertex,
-  Undirected,
-  Directed,
+  UndirectedEdge,
+  DirectedEdge,
   UndirectedHyperedge,
   DirectedHyperedge,
 } from '../../src';
@@ -14,11 +14,11 @@ break anything.
 
 */
 
-describe('Undirected should accept a vertex pair and', () => {
+describe('UndirectedEdge should accept a vertex pair and', () => {
   it ('should return the first element with the x morphism', () => {
     const a = new KeyVertex('A');
     const b = new KeyVertex('B');
-    const E = new Undirected([a, b]);
+    const E = new UndirectedEdge([a, b]);
     expect(E.x).toEqual(a);
   });
 
@@ -26,7 +26,7 @@ describe('Undirected should accept a vertex pair and', () => {
     const a = new KeyVertex('A');
     const b = new KeyVertex('B');
     const c = new KeyVertex('C');
-    const E = new Undirected([a, b]);
+    const E = new UndirectedEdge([a, b]);
     E.x = c;
     expect(E.x).toEqual(c);
   });
@@ -34,7 +34,7 @@ describe('Undirected should accept a vertex pair and', () => {
   it('should return the second element with the y morphism', () => {
     const a = new KeyVertex('A');
     const b = new KeyVertex('B');
-    const E = new Undirected([a, b]);
+    const E = new UndirectedEdge([a, b]);
     expect(E.y).toEqual(b);
   });
 
@@ -42,7 +42,7 @@ describe('Undirected should accept a vertex pair and', () => {
     const a = new KeyVertex('A');
     const b = new KeyVertex('B');
     const c = new KeyVertex('C');
-    const E = new Undirected([a, b]);
+    const E = new UndirectedEdge([a, b]);
     E.y = c;
     expect(E.y).toEqual(c);
   });
@@ -50,9 +50,9 @@ describe('Undirected should accept a vertex pair and', () => {
   it('should map to a right oriented directed edge', () => {
     const a = new KeyVertex('A');
     const b = new KeyVertex('B');
-    const E = new Undirected([a, b]);
+    const E = new UndirectedEdge([a, b]);
     const D = E.toRight();
-    expect(D instanceof Directed).toBe(true);
+    expect(D instanceof DirectedEdge).toBe(true);
     expect(D.h).toEqual(a);
     expect(D.t).toEqual(b);
   });
@@ -60,9 +60,9 @@ describe('Undirected should accept a vertex pair and', () => {
   it('should map to a left oriented directed edge', () => {
     const a = new KeyVertex('A');
     const b = new KeyVertex('B');
-    const E = new Undirected([a, b]);
+    const E = new UndirectedEdge([a, b]);
     const D = E.toLeft();
-    expect(D instanceof Directed).toBe(true);
+    expect(D instanceof DirectedEdge).toBe(true);
     expect(D.h).toEqual(b);
     expect(D.t).toEqual(a);
   });
@@ -70,7 +70,7 @@ describe('Undirected should accept a vertex pair and', () => {
   it('should map to a right oriented directed edge', () => {
     const a = new KeyVertex('A');
     const b = new KeyVertex('B');
-    const E = new Undirected([a, b]);
+    const E = new UndirectedEdge([a, b]);
     const D = E.toRightHyperedge();
     expect(D instanceof DirectedHyperedge).toBe(true);
     expect(D.h).toEqual([a]);
@@ -80,7 +80,7 @@ describe('Undirected should accept a vertex pair and', () => {
   it('should map to a left oriented directed hyperedge', () => {
     const a = new KeyVertex('A');
     const b = new KeyVertex('B');
-    const E = new Undirected([a, b]);
+    const E = new UndirectedEdge([a, b]);
     const D = E.toLeftHyperedge();
     expect(D instanceof DirectedHyperedge).toBe(true);
     expect(D.h).toEqual([b]);
@@ -90,18 +90,18 @@ describe('Undirected should accept a vertex pair and', () => {
   it('should map to a hyperedge', () => {
     const a = new KeyVertex('A');
     const b = new KeyVertex('B');
-    const E = new Undirected([a, b]);
+    const E = new UndirectedEdge([a, b]);
     const D = E.toUndirectedHyperedge();
     expect(D instanceof UndirectedHyperedge).toBe(true);
     expect(D.vertices[0]).toEqual([a,b]);
   });
 });
 
-describe('Directed should accept a vertex pair and', () => {
+describe('DirectedEdge should accept a vertex pair and', () => {
   it('should return the head element with the h morphism', () => {
     const a = new KeyVertex('A');
     const b = new KeyVertex('B');
-    const E = new Directed([a, b]);
+    const E = new DirectedEdge([a, b]);
     expect(E.h).toEqual(a);
   });
 
@@ -109,7 +109,7 @@ describe('Directed should accept a vertex pair and', () => {
     const a = new KeyVertex('A');
     const b = new KeyVertex('B');
     const c = new KeyVertex('C');
-    const E = new Directed([a, b]);
+    const E = new DirectedEdge([a, b]);
     E.h = c;
     expect(E.h).toEqual(c);
   });
@@ -117,7 +117,7 @@ describe('Directed should accept a vertex pair and', () => {
   it('should return the target element with the t morphism', () => {
     const a = new KeyVertex('A');
     const b = new KeyVertex('B');
-    const E = new Directed([a, b]);
+    const E = new DirectedEdge([a, b]);
     expect(E.t).toEqual(b);
   });
 
@@ -125,7 +125,7 @@ describe('Directed should accept a vertex pair and', () => {
     const a = new KeyVertex('A');
     const b = new KeyVertex('B');
     const c = new KeyVertex('C');
-    const E = new Directed([a, b]);
+    const E = new DirectedEdge([a, b]);
     E.t = c;
     expect(E.t).toEqual(c);
   });
@@ -133,7 +133,7 @@ describe('Directed should accept a vertex pair and', () => {
   it('should map to a directed hyperedge', () => {
     const a = new KeyVertex('A');
     const b = new KeyVertex('B');
-    const E = new Directed([a, b]);
+    const E = new DirectedEdge([a, b]);
     const D = E.toDirectedHyperedge();
     expect(D instanceof DirectedHyperedge).toBe(true);
     expect(D.h).toEqual([a]);
@@ -143,9 +143,9 @@ describe('Directed should accept a vertex pair and', () => {
   it('should map to an undirected edge', () => {
     const a = new KeyVertex('A');
     const b = new KeyVertex('B');
-    const E = new Directed([a, b]);
+    const E = new DirectedEdge([a, b]);
     const D = E.toUndirected();
-    expect(D instanceof Undirected).toBe(true);
+    expect(D instanceof UndirectedEdge).toBe(true);
     expect(D.x).toEqual(a);
     expect(D.y).toEqual(b);
   });
@@ -160,7 +160,7 @@ describe('UndirectedHyperedge', () => {
   });
 });
 
-describe('DirectedHyperEdge should', () => {
+describe('DirectedHyperedge should', () => {
   /*
    * ┌─┐  ┌─┐
    * │A│  │C│
