@@ -1,21 +1,68 @@
 # Graphlib
 
-A typed graph library taking inspiration from category theory. This is very much a work in progress.
+A typed graph library taking inspiration from category theory. This is very much
+a work in progress.
 
-## Basic Principles
+## Summary of Graph Principles
 
-There are several rules that can be applied to constructing graphs. The general
-overview of how graphs are typically constructed are laid out below. There are
-several generalizations and observations that can be made about graphs and
-hypergraphs given all these relationships.
+Typically, graphs are simply defined as vertices connected by edges. Slight more
+formally, graphs are a set of vertices and a set of edges that connect two or
+more vertices. Sometimes edges are called "arcs" or "arrows". Here I try to use
+"edges". Edges can be undirected (a reciprical relationship) or directed. In the
+directed case, there there is a head and a tail (sometimes called start and end).
+There are several rules that can be applied to constructing graphs. Here, I'll go
+over the way I've been thinking about graphs. The mathematical rules of how
+graphs are typically constructed are laid out in a later section.
+
+If we reduce the graph to primitives, we can see a graph is really just a set of
+sets of sets. Edges can be looked at like they are a set of sets. The graph
+itself has a set of those sets. This implementation allows us to see that the
+underlying type is the same across all edges:
+
+* A simple edge is a set two sets, one with two elements while the other sits
+  empty.
+* A directed edge is a set of two sets with one element each, the head and the
+  tail.
+* A hyperedge has a set of two sets, one with as no restriction on elements
+  while the other sits empty.
+* A directed hyperedge has a set of two sets (head and tail sets), with no
+  restriction on size for either set.
+
+Of course, the other way of looking at it is that undirected edges have a set of
+one set, while directed edges have a set of two sets, one set being the head, 
+the other set being the tail.
+
+We can see that each type of graph is really just a more restricted form of
+a general hypergraph (which allows all types of edges to coexist in any number):
+
+* Regular multigraphs being 2-uniform hypergraphs (each edge of size 2).
+  * Edges must be size two.
+* Regular graphs being being 2-uniform hypergraphs.
+  * Edges must be size two.
+  * Only undirected edges.
+* Directed graphs (digraphs) being 2-uniform directed hypergraphs.
+  * Edges must be size two.
+  * Only directed edges.
+* Oriented digraphs being 2-uniform directed hypergraphs.
+  * Edges must be size two.
+  * Only directed edges.
+  * Every edge must point the same direction.
+  * Only one edge per unique pair of vertices.
+
+Additionally, we can define other restrictions, such as not allowing loops. Or,
+perhaps, other maps which define certain vertices as "roots".
+
+## A Deeper Look at The Math
 
 For those needing a refresher:
+
 * {} is an unordered set
 * () is an orderd set (tuple)
 * Any captial letter refers to one of the above.
 * A lower case letter refers to an element of one of the above.
 
 We can define the folowing:
+
 * Allow only one edge between vertices
   * Undirected simple graph - graph
     * G = (V, E)
@@ -77,32 +124,8 @@ We can define the folowing:
     * In a hypergraph, it connects a set of vertices.
   * In a directed graph, an an edge connects a head vertex to a tail vertex.
     * In a dihypergraph, it connects a set of head vertices to a set of tail vertices.
-  * All we need is to pass in a specific Edge set typed to match a hyperedge.
 
-We can simply compose modules that implement the above functionalities.
-
-If we reduce the graph to primitives, we can see that it is really just a set
-of sets (of sets). A hyperedge has up to two sets. An edge in a graph has two
-elements. The graph itself has a set of those sets. This implementation allows
-us to see that the underlying type is the same across all edges.
-
-We can see that each type of graph is really just a more restricted form of
-a general hypergraph:
-* Regular multigraphs being 2-uniform hypergraphs (each edge of size 2).
-  * Edges must be size two.
-* Regular graphs being being 2-uniform hypergraphs.
-  * Edges must be size two.
-  * Only undirected edges.
-* Directed graphs (digraphs) being 2-uniform dihypergraphs.
-  * Edges must be size two.
-  * Only directed edges.
-* Oriented digraphs being 2-uniform dihypergraphs.
-  * Edges must be size two.
-  * Only directed edges.
-  * Every edge must point the same direction.
-  * Only one edge per pair of vertices.
-
-Additionally, we can define other restrictions, such as not allowing loops.
+## Reading
 
 In 2020, I was thinking about this problem and before I fully understood the
 pattern I was seeing I ran across a few papers that inspired me:
@@ -131,7 +154,7 @@ Additionally, the following were helpful for clarifying some concepts:
 * [Do, M. T., Yoon, S. E., Hooi, B., & Shin, K. (2020, August). Structural patterns and generative models of real-world hypergraphs. In Proceedings of the 26th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining (pp. 176-186).](https://www.researchgate.net/publication/342169087_Structural_Patterns_and_Generative_Models_of_Real-world_Hypergraphs)
 * [Lee, G., Choe, M., & Shin, K. (2021, April). How Do Hyperedges Overlap in Real-World Hypergraphs?-Patterns, Measures, and Generators. In Proceedings of the Web Conference 2021 (pp. 3396-3407).](https://dl.acm.org/doi/abs/10.1145/3442381.3450010)
 
-Here are papers on hyperpaths, which I've been thinking about:
+Here are papers on hyperpaths which I've been thinking about:
 
 * [Nguyen, S., & Pallottino, S. (1989). Hyperpaths and shortest hyperpaths. In Combinatorial Optimization (pp. 258-271). Springer, Berlin, Heidelberg.](https://link.springer.com/chapter/10.1007/BFb0083470)
 * [Nguyen, S., Pallottino, S., & Gendreau, M. (1998). Implicit enumeration of hyperpaths in a logit model for transit networks. Transportation Science, 32(1), 54-64\.](https://pubsonline.informs.org/doi/epdf/10.1287/trsc.32.1.54)
@@ -146,3 +169,22 @@ Here are papers on hyperpaths, which I've been thinking about:
 * [Dahari, A., & Linial, N. (2020). Hyperpaths. arXiv preprint arXiv:2011.09936\.](https://arxiv.org/abs/2011.09936)
 * [Krieger, S., Kececioglu, J. (2021) Approaches for shortest hyperpath and minimum-hyperedge factories in directed hypergraphs](http://hyperpaths.cs.arizona.edu/)
 * [What is a hyperpath, anyway?](https://fast-trips.mtc.ca.gov/2016/04/21/What-is-a-hyperpath-anyway/)
+
+Also, here are some category theoretic papers on open graphs:
+
+
+* [Dixon, L., & Kissinger, A. (2013). Open-graphs and monoidal theories. Mathematical Structures in Computer Science, 23(2), 308-359.](https://arxiv.org/abs/1011.4114)
+* [Kissinger, A. (2014). Finite matrices are complete for (dagger-) hypergraph categories. arXiv preprint arXiv:1406.5942.](https://arxiv.org/abs/1406.5942)
+* [Fong, B. (2015). Decorated cospans. arXiv preprint arXiv:1502.00872.](https://arxiv.org/abs/1502.00872)
+* [Fong, B. (2016). The algebra of open and interconnected systems. arXiv preprint arXiv:1609.05382.](https://arxiv.org/abs/1609.05382)
+* [Bonchi, F., Seeber, J., & Sobocinski, P. (2018). Graphical conjunctive queries. arXiv preprint arXiv:1804.07626.](https://arxiv.org/abs/1804.07626)
+[Proudfoot, N., & Ramos, E. (2019). The contraction category of graphs. arXiv preprint arXiv:1907.11234.](https://arxiv.org/abs/1907.11234)
+* [Jenča, G. (2019). Two monads on the category of graphs. Mathematica Slovaca, 69(2), 257-266.](https://arxiv.org/abs/1706.00081)
+* [Master, J. (2020). The open algebraic path problem. arXiv preprint arXiv:2005.06682.](https://arxiv.org/pdf/2005.06682.pdf)
+* [Patterson, E., Lynch, O., & Fairbanks, J. (2021). Categorical Data Structures for Technical Computing. arXiv preprint arXiv:2106.04703.](https://arxiv.org/abs/2106.04703)
+* [Patterson, E., Lynch, O., & Fairbanks, J. (2021). Categorical Data Structures for Technical Computing. arXiv preprint arXiv:2106.04703.](https://arxiv.org/pdf/2106.04703.pdf)
+* [Chih, T., & Scull, L. (2021). A homotopy category for graphs. Journal of Algebraic Combinatorics, 53(4), 1231-1251.](https://arxiv.org/abs/1901.01619)
+* [Hackney, P. (2021). Categories of graphs for operadic structures. arXiv preprint arXiv:2109.06231.](https://arxiv.org/abs/2109.06231)
+* [Bumpus, B. M., & Kocsis, Z. A. (2021). Spined categories: generalizing tree-width beyond graphs. arXiv preprint arXiv:2104.01841.](https://arxiv.org/abs/2104.01841)
+* [Master, J. E. (2021). Composing Behaviors of Networks. University of California, Riverside.](https://arxiv.org/pdf/2105.12905.pdf)
+* [networks_robotics_web.pdf](https://math.ucr.edu/home/baez/robotics/networks_robotics_web.pdf)
