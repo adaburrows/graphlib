@@ -1,7 +1,7 @@
 import { IVertex } from './vertex';
 
 /**
- * Edges and Arcs have only pair of vertices per edge.
+ * Edges and Arcs have only a pair of vertices per edge.
  */
 export type VertexPair = [IVertex, IVertex];
 
