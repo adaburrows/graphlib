@@ -1,6 +1,6 @@
 {
   "include": [
-    "src/index.ts",
+    "src/**/*",
   ],
   "exclude": [
     "node_modules",
@@ -25,6 +25,7 @@
     "outDir": "dist",
     "rootDir": "src",
     "baseUrl": ".",
+    "experimentalDecorators": true,
     "strict": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
@@ -35,15 +36,8 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "moduleResolution": "node",
+    "isolatedModules": true,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "paths": {
-      "utility": [
-        "test/utility/index.ts"
-      ],
-      "@adaburrows/graphlib": [
-        "dist/index.js"
-      ]
-    }
+    "forceConsistentCasingInFileNames": true
   }
 }
