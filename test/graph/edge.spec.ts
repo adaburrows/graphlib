@@ -47,6 +47,13 @@ describe('UndirectedEdge should accept a vertex pair and', () => {
     expect(E.y).toEqual(c);
   });
 
+  it('should indicate if the edge is a loop', () => {
+    const a = new KeyVertex('A');
+    const b = new KeyVertex('A');
+    const E = new UndirectedEdge([a, b]);
+    expect(E.isLoop).toBe(true);
+  });
+
   it('should map to a right oriented directed edge', () => {
     const a = new KeyVertex('A');
     const b = new KeyVertex('B');
@@ -130,6 +137,13 @@ describe('DirectedEdge should accept a vertex pair and', () => {
     expect(E.t).toEqual(c);
   });
 
+  it('should indicate if the edge is a loop', () => {
+    const a = new KeyVertex('A');
+    const b = new KeyVertex('A');
+    const E = new DirectedEdge([a, b]);
+    expect(E.isLoop).toBe(true);
+  });
+
   it('should map to a directed hyperedge', () => {
     const a = new KeyVertex('A');
     const b = new KeyVertex('B');
@@ -144,7 +158,7 @@ describe('DirectedEdge should accept a vertex pair and', () => {
     const a = new KeyVertex('A');
     const b = new KeyVertex('B');
     const E = new DirectedEdge([a, b]);
-    const D = E.toUndirected();
+    const D = E.toUndirectedEdge();
     expect(D instanceof UndirectedEdge).toBe(true);
     expect(D.x).toEqual(a);
     expect(D.y).toEqual(b);
@@ -157,6 +171,13 @@ describe('UndirectedHyperedge', () => {
     const nodes = labels.map((x) => new KeyVertex(x));
     const E = new UndirectedHyperedge(nodes);
     expect(E.size).toEqual(4);
+  });
+
+  it('should indicate if the edge is a loop', () => {
+    const labels = ['A', 'A'];
+    const nodes = labels.map((x) => new KeyVertex(x));
+    const E = new UndirectedHyperedge(nodes);
+    expect(E.isLoop).toBe(true);
   });
 });
 
@@ -217,5 +238,12 @@ describe('DirectedHyperedge should', () => {
     const E = new DirectedHyperedge(nodes.slice(0,2), nodes.slice(2,4));
     E.t = nodes.slice(4,6);
     expect(E.t).toEqual(nodes.slice(4,6));
+  });
+
+  it('should indicate if the edge is a loop', () => {
+    const labels = ['A'];
+    const nodes = labels.map((x) => new KeyVertex(x));
+    const E = new DirectedHyperedge(nodes, nodes);
+    expect(E.isLoop).toBe(true);
   });
 });

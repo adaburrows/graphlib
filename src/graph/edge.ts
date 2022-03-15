@@ -1,26 +1,12 @@
-import { IVertex } from './vertex';
+import { IVertex, VertexPair, VertexSet, VertexSetSet } from './vertex';
 
-/**
- * Edges and Arcs have only a pair of vertices per edge.
- */
-export type VertexPair = [IVertex, IVertex];
-
-/**
- * Hypergraphs can have up to two vertex sets per edge.
- */
-export type VertexSet = IVertex[];
-
-/**
- * Internally, we represent everything as a set of sets, which allows a simple
- * map from graph to hypergraph.
- */
- export type VertexSetSet = VertexSet[];
 
 /**
  * Interface for edges.
  */
 export interface IEdge {
   vertices: VertexSetSet;
+  isLoop: boolean;
 }
 
 /**
@@ -37,7 +23,11 @@ export interface IHyperedge extends IEdge {
 export abstract class Edge implements IEdge{
   public vertices: VertexSetSet;
   constructor() {
-    this.vertices = new Array<IVertex[]>(2);
+    this.vertices = new Array<VertexSet>(2);
+  }
+
+  get isLoop(): boolean {
+    throw Error("isLoop() not implemented");
   }
 }
 
@@ -69,6 +59,20 @@ export class UndirectedEdge extends Edge {
 
   set y(v: IVertex) {
     this.vertices[0][1] = v;
+  }
+
+  /**
+   * Is the edge a loop?
+   * This assumes no key collisions across the whole dataset.
+   * TODO:
+   * Theoretically, this could be represented the same way as it is in the
+   * UndirectedHyperedge. When there is a loop, we could automatically reduce it
+   * to not have a `y` element. The question is should we? It may be more logic
+   * and, technically, it would use the same amount of memory without doing crazy
+   * things in an ArrayBuffer.
+   */
+  override get isLoop(): boolean {
+    return this.x.key == this.y.key;
   }
 
   /**
@@ -134,6 +138,14 @@ export class DirectedEdge extends Edge {
   }
 
   /**
+   * Is the edge a loop?
+   * This assumes no key collisions across the whole dataset.
+   */
+   override get isLoop(): boolean {
+    return this.h.key == this.t.key;
+  }
+
+  /**
    * Returns a directed hyperedge.
    */
   public toDirectedHyperedge(): DirectedHyperedge {
@@ -143,7 +155,7 @@ export class DirectedEdge extends Edge {
   /**
    * Returns an undirected edge.
    */
-  public toUndirected(): UndirectedEdge {
+  public toUndirectedEdge(): UndirectedEdge {
     return new UndirectedEdge([this.h, this.t]);
   }
 }
@@ -159,6 +171,27 @@ export abstract class Hyperedge extends Edge implements IEdge {
 
   public get size(): number {
     return this.vertices[0].length;
+  }
+
+  /**
+   * Is the edge a loop?
+   * This assumes no key collisions across the whole dataset.
+   * TODO:
+   * When we implement duplicate checking for vertices in edges, this will just
+   * need to compare `this.size) instead of `nonRepeats`.
+   */
+  override get isLoop(): boolean {
+    const nonRepeats = this.vertices[0].reduce<VertexSet>((accum: VertexSet, vertex: IVertex): VertexSet => {
+      if(accum.length) {
+        if(accum[0].key != vertex.key) {
+          accum.push(vertex);
+        }
+      } else {
+        accum.push(vertex)
+      }
+      return accum;
+    }, new Array<IVertex>());
+    return nonRepeats.length == 1;
   }
 
   // Q: Should we write a functor going to mutitple edges?
@@ -198,6 +231,19 @@ export class DirectedHyperedge extends Hyperedge {
 
   public override get size(): number {
     return this.vertices[0].length + this.vertices[1].length;
+  }
+
+  /**
+   * Is the edge a loop?
+   * This assumes no key collisions across the whole dataset.
+   * TODO:
+   * Is a directed hyperedge with size being 2n that loops back to the same set
+   * of n vertices a loop? Probably. We need to have a more robust way
+   * of checking that the two sets have vertices with the same keys no matter
+   * which order they are in.
+   */
+   override get isLoop(): boolean {
+    return this.size == 2 && this.h[0].key == this.t[0].key;
   }
 
   // Q: Should we write a functor going to mutitple directed edges?

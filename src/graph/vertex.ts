@@ -2,14 +2,21 @@
 /**
  * Only allow number, string, or symbol for keys.
  */
-export type keyType = number | string | symbol;
+export type VertexKeyType = number | string | symbol;
 
 /**
  * Base Vertex Interface
  */
 export interface IVertex {
-  get key(): keyType;
+  get key(): VertexKeyType;
 }
+
+/**
+ * types for vertex sets
+ */
+export type VertexPair = [IVertex, IVertex];
+export type VertexSet = IVertex[];
+export type VertexSetSet = VertexSet[];
 
 /**
  * This is a flexible graph vertex class. By default it can just use strings or
@@ -24,9 +31,9 @@ export interface IVertex {
  */
 export class DataVertex<T> implements IVertex {
   protected _data: T;
-  protected _key_accessor: (x: T) => keyType;
+  protected _key_accessor: (x: T) => VertexKeyType;
  
-  constructor(data: T, key_accessor: (x: T) => keyType) {
+  constructor(data: T, key_accessor: (x: T) => VertexKeyType) {
     this._data = data;
     this._key_accessor = key_accessor;
   }
@@ -49,21 +56,21 @@ export class DataVertex<T> implements IVertex {
    * Returns the key to the node. In the default case, this is the identity
    * function so it returns the object in _data directly.
    */
-  public get key(): keyType {
+  public get key(): VertexKeyType {
     return this._key_accessor(this._data);
   }
 
   /**
    * Allows setting the key accessor function.
    */
-  public set key_accessor(accessor: (x: T) => keyType) {
+  public set key_accessor(accessor: (x: T) => VertexKeyType) {
     this._key_accessor = accessor;
   }
 
   /**
    * Returns the key
    */
-  public valueOf(): keyType {
+  public valueOf(): VertexKeyType {
     return this.key;
   }
 
@@ -76,18 +83,18 @@ export class DataVertex<T> implements IVertex {
 }
 
 /**
- * Example of a vertex implementation that only allows data of `keyType`
+ * Example of a vertex implementation that only allows data of `VertexKeyType`
  */
-export class KeyVertex extends DataVertex<keyType> {
+export class KeyVertex extends DataVertex<VertexKeyType> {
 
-  constructor(data: keyType) {
+  constructor(data: VertexKeyType) {
     super(data, KeyVertex.identity);
   }
 
   /**
    * By default, the identity function is used as the key accessor.
    */
-  public static identity(x: keyType): keyType {
+  public static identity(x: VertexKeyType): VertexKeyType {
     return x;
   }
 }
