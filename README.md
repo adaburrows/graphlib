@@ -97,6 +97,15 @@ const graph = new SimpleGraphNoLoops();
 
 #### Rooted
 
+Adds a set of roots to a graph and an interface to add roots and retrieve them:
+
+```
+class Digraph extends Graph<Datum, DirectedEdge> {}
+const DigraphNoLoops = NoLoops(Digraph);
+const Tree = Rooted(DigraphNoLoops);
+const arbol = new Tree();
+```
+
 ### The Graph
 
 The graph allows us to specify the types of vertices and edges allow within the

@@ -1,4 +1,4 @@
-import { Graph, IVertex, Edge, UndirectedEdge, DirectedEdge, UndirectedHyperedge, DirectedHyperedge, NoLoops } from "../../src";
+import { Graph, IVertex, Edge, UndirectedEdge, DirectedEdge, UndirectedHyperedge, DirectedHyperedge, NoLoops, Rooted } from "../../src";
 
 /**
  * Example custom vertex type used for testing
@@ -111,5 +111,19 @@ describe('A graph using NoLoops', () => {
     expect(() => {
       graph.addEdge(undirectedEdge);
     }).toThrow("A loop was detected in the data and the current graph disallows loops.");
+  });
+});
+
+describe('A graph using Rooted', () => {
+  test('should allow adding a root', () => {
+    class Digraph extends Graph<Datum, DirectedEdge> {}
+    const DigraphNoLoops = NoLoops(Digraph);
+    const Tree = Rooted(DigraphNoLoops);
+    const arbol = new Tree();
+
+    // Setup graph and add data
+    arbol.addVertices(data);
+    arbol.addRoot(data[0]);
+    expect(arbol.getRoots()[0]).toBe(data[0]);
   });
 });
