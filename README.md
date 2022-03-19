@@ -1,101 +1,137 @@
 # Graphlib
 
 A typed graph library taking inspiration from category theory. This is very much
-a work in progress.
+a work in progress, but has some basic capabilities already.
 
-## Summary of Graph Principles
+For a basic summary of how this library conceptualizes graphs, [please read the summary](docs/summary.md).
 
-Typically, graphs are simply defined as vertices connected by edges. Slight more
-formally, graphs are a set of vertices and a set of edges that connect two or
-more vertices. Sometimes edges are called "arcs" or "arrows". Here I try to use
-"edges". Edges can be undirected (a reciprical relationship) or directed. In the
-directed case, there there is a head and a tail (sometimes called start and end).
-There are several rules that can be applied to constructing graphs. Here, I'll go
-over the way I've been thinking about graphs. The mathematical rules of how
-graphs are typically constructed are laid out in a later section.
+## Usage
 
-If we reduce the graph to primitives, we can see a graph is really just a set of
-sets of sets. Edges can be looked at like they are a set of sets. The graph
-itself has a set of those sets. This implementation allows us to see that the
-underlying type is the same across all edges:
+The most basic usage of the graph library is to construct an undirected
+multigraph (note the edge type restriction):
 
-* A simple edge is a set two sets, one with two elements while the other sits
-  empty.
-* A directed edge is a set of two sets with one element each, the head and the
-  tail.
-* A hyperedge has a set of two sets, one with as no restriction on elements
-  while the other sits empty.
-* A directed hyperedge has a set of two sets (head and tail sets), with no
-  restriction on size for either set.
+```
+const graph = new Graph<KeyVertex, UndirectedEdge>();
+const vertices = [
+  new KeyVertex(0),
+  new KeyVertex(1),
+  new KeyVertex(2)
+];
+const edges = [
+  new UndirectedEdge(nodes[0], nodes[1]),
+  new UndirectedEdge(nodes[1], nodes[2]),
+  new UndirectedEdge(nodes[2], nodes[0])
+];
+graph.addVertices(vertices);
+graoh.addEdges(edges);
+```
 
-Of course, the other way of looking at it is that undirected edges have a set of
-one set, while directed edges have a set of two sets, one set being the head, 
-the other set being the tail.
+### Interfaces
 
-We can see that each type of graph is really just a more restricted form of
-a general hypergraph (which allows all types of edges to coexist in any number):
+The library has some basic interfaces that all the parts of the graph use:
 
-* Regular multigraphs being 2-uniform hypergraphs (each edge of size 2).
-  * Edges must be size two.
-* Regular graphs being being 2-uniform hypergraphs.
-  * Edges must be size two.
-  * Only undirected edges.
-* Directed graphs (digraphs) being 2-uniform directed hypergraphs.
-  * Edges must be size two.
-  * Only directed edges.
-* Oriented digraphs being 2-uniform directed hypergraphs.
-  * Edges must be size two.
-  * Only directed edges.
-  * Every edge must point the same direction.
-  * Only one edge per unique pair of vertices.
+* `IVertex` &mdash; Requires a unique key property that must be a `VertexKeyType`
+(one of `number | string | symbol`).
+* `IEdge` &mdash; Requires a set of sets of vertices (a `VertexSetSet`) and an
+`isLoop` accessor that determines if the edge is a loop (not to be confused with
+a similar term called a cycle).
 
-Additionally, we can define other restrictions, such as not allowing loops. Or,
-perhaps, other maps which define certain vertices as "roots".
+### Vertices
 
-### The Adjacency Matrix + Linear Algebra
+There is currently no base class that all vertices derrive from. The idea is that
+most vertex types will be application specific. The only restriction is that it
+must implement `IVertex`.
 
-The other represenation of a graph is as a matrix. There is actually more than
-one matrix representation, but the adjacency matrix is the most common. The
-adjacency matrix representation begins by assigning an index to each node in the
-graph. If there are N nodes in the graph, the index will run from 0 to (N-1).
-The N x N matrix then contains a 1 as the element e_{ij} whenever node i connects
-to node j.
+* `DataVertex<T>` &mdash; A basic vertex that allows any kind of data to be stored
+as long as a corresponding `key_accessor` is provided.
+  * `KeyVertex<VertexKeyType>` &mdash; An exmple vertex that only stores the key.
+  The `key_accessor` is just the identity function.
 
-For example, imagine we have a graph with three nodes. Lets see the
-undirected version of the matrix where they are all connected in a triangle:
+Here is an example vertex class used in the tests:
 
-![](https://latex.codecogs.com/png.image?%5Cbegin%7Bbmatrix%7D0%20&%201%20&%201%20%5C%5C1%20&%200%20&%201%20%5C%5C1%20&%201%20&%200%20%5C%5C%5Cend%7Bbmatrix%7D)
+```
+class Datum implements IVertex {
+  public id: number;
+  public name: string;
+  public notes: string;
 
-If there was an undirected loop on node 1, then e_{00}, would be a two:
+  constructor(id: number, name: string, notes: string) {
+    this.id = id;
+    this.name = name;
+    this.notes = notes;
+  }
 
-![](https://latex.codecogs.com/png.image?%5Cbegin%7Bbmatrix%7D2%20&%201%20&%201%20%5C%5C1%20&%200%20&%201%20%5C%5C1%20&%201%20&%200%20%5C%5C%5Cend%7Bbmatrix%7D)
+  public get key(): number {
+    return this.id;
+  }
+}
+```
 
-Here is the directed graph where node 1 points to node 2, node 2 points to node 3, and node 3 points to node 1:
+### Edges
 
-![](https://latex.codecogs.com/png.image?%5Cbegin%7Bbmatrix%7D0%20&%200%20&%201%20%5C%5C1%20&%200%20&%200%20%5C%5C0%20&%201%20&%200%20%5C%5C%5Cend%7Bbmatrix%7D)
+The edges form a hierarchy of:
 
-If there was a directed loop on node 1, then e_{00} would be one:
+* `Edge`
+  * `UndirectedEdge`
+  * `DirectedEdge`
+  * `Hyperedge`
+    * `UndirectedHyperedge`
+    * `DirectedHyperedge`
 
-![](https://latex.codecogs.com/png.image?%5Cbegin%7Bbmatrix%7D1%20&%200%20&%201%20%5C%5C1%20&%200%20&%200%20%5C%5C0%20&%201%20&%200%20%5C%5C%5Cend%7Bbmatrix%7D)
+This hierarchy can be used to limit what kinds of edges can be added to a graph.
 
-Since multigraphs, can multiple edges between two points, the entry in the
-adjacency matrix will be multiplied by the number of times that path occurs. Also,
-If a graph mixes both directed and undirected edges, it won't be symmetric and
-certain entries will be the some of the directed edge plus the undirected edge.
+### Mixins
 
-E.g., In the original undirected graph, we can add two directed edges, from node
-2 to node 1 and from node 3 to node 1. The resulting adjacency matrix will be:
+There are certain mixins which can modify the behavior of the graph. Using the
+mixins can be slightly awkward, but it makes sense.
 
-![](https://latex.codecogs.com/png.image?%5Cbegin%7Bbmatrix%7D0%20&%202%20&%202%20%5C%5C1%20&%200%20&%201%20%5C%5C1%20&%201%20&%200%20%5C%5C%5Cend%7Bbmatrix%7D)
+#### NoLoops
 
-What's intriguing about a matrix representation of a graph is that it allows
-traversing the graph and studying the graph through linear algebra. More of this
-will be demonstrated in the examples. 
+Restricts a graph from having any loops:
 
-### Set Theory Overview
+```
+class SimpleGraph extends Graph<Datum, UndirectedEdge> {}
+const SimpleGraphNoLoops = NoLoops(SimpleGraph);
+const graph = new SimpleGraphNoLoops();
+```
 
-If you would like to read a highly condensed set theory overview of graphs, see [Set Theory Overview](docs/set_theory_overview.md).
+#### Rooted
 
-### Reading
+### The Graph
+
+The graph allows us to specify the types of vertices and edges allow within the
+graph:
+
+```
+Graph<VertexType extends IVertex, EdgeType extends Edge>
+```
+
+This means that any kind of graph can be constructed by restricting the graph
+types:
+
+```
+// Anything goes generalized graph, can have any number of any type of edge
+const general_graph = new Graph<KeyVertex, Edge>();
+
+// Multigraph, can have any number of undirected or directed edges
+const multigraph = new Graph<KeyVertex, UndirectedEdge | DirectedEdge>();
+
+// Digraph
+const digraph = new Graph<KeyVertex, DirectedEdge>();
+
+// Graph
+const graph = new Graph<KeyVertex, UndirectedEdge>();
+
+// Hypergraph
+const hypergraph = new Graph<KeyVertex, Hyperedge>();
+
+// Undirected hypergraph, any number of undirected hyperedges
+const uhypergraph = new Graph<KeyVertex, UndirectedEdge>();
+
+// Directed hypergraph, any number of directed hyperedges
+const dhypergraph = new Graph<KeyVertex, DirectedEdge>();
+```
+
+## Reading
 
 There is [a long list of reading material around graphs and graph algorithms here](docs/reading.md).

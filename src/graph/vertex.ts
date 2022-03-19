@@ -1,4 +1,3 @@
-
 /**
  * Only allow number, string, or symbol for keys.
  */

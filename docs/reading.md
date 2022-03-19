@@ -69,5 +69,8 @@ Introductory Books
 * Tutte, W.T. (2001). Graph Theory. Cambridge University Press, p. 30, ISBN 978-0-521-79489-3
 * [Bender, E.A. & Williamson, S.G. (2010) Lists, Decisions and Graphs.](https://www.google.com/books/edition/Lists_Decisions_and_Graphs/vaXv_yhefG8C?hl=en&gbpv=1)
 * Kepner, J., & Gilbert, J. (Eds.). (2011). Graph algorithms in the language of linear algebra. Society for Industrial and Applied Mathematics.
+
+Linear algebra
+
 * [Kepner, J., Aaltonen, P., Bader, D., Buluç, A., Franchetti, F., Gilbert, J., ... & Moreira, J. (2016, September). Mathematical foundations of the GraphBLAS. In 2016 IEEE High Performance Extreme Computing Conference (HPEC) (pp. 1-9). IEEE.](https://arxiv.org/pdf/1606.05790.pdf)
 * [Gilbert, J. (2018) Graph Algorithms in the Language of Linear Algebra: How did we get here, where do we go next? IPDPS Graph Algorithms Building Blocks. [Presentation Slides]](https://sites.cs.ucsb.edu/~gilbert/talks/2018-05-21-GilbertGABB21May2018.pdf)

@@ -1,6 +1,5 @@
 import { IVertex, VertexPair, VertexSet, VertexSetSet } from './vertex';
 
-
 /**
  * Interface for edges.
  */
@@ -163,7 +162,7 @@ export class DirectedEdge extends Edge {
 /**
  * The base hyperedge type from which all hyperedges are derrived.
  */
-export abstract class Hyperedge extends Edge implements IEdge {
+export abstract class Hyperedge extends Edge implements IHyperedge {
   constructor(vertices: VertexSet) {
     super();
     this.vertices[0] = vertices;
