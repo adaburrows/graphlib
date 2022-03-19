@@ -80,6 +80,24 @@ The edges form a hierarchy of:
 
 This hierarchy can be used to limit what kinds of edges can be added to a graph.
 
+#### Labled Edges
+
+To create a labeled edge, it simply derive a child class that has a label:
+
+```
+export class LabeledArrow extends DirectedEdge {
+  public label: string;
+
+  constructor(label: string, ...vertex_pair:VertexPair) {
+    super(vertex_pair);
+    this.label = label;
+  }
+}
+```
+
+While it would be possible to create a mixin, the mixin wouldn't be able to change
+the constructor signature. 
+
 ### Mixins
 
 There are certain mixins which can modify the behavior of the graph. Using the
