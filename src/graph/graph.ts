@@ -98,7 +98,7 @@ export class Graph<VertexType extends IVertex, EdgeType extends Edge> {
 /**
  * Constructor type used for the mix-in pattern
  */
- type GraphConstructor = new (...args: any[]) => Graph<IVertex, Edge>;
+type GraphConstructor = new (...args: any[]) => Graph<IVertex, Edge>;
 
 /**
  * Mix-in to disallow loops

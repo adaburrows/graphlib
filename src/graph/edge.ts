@@ -140,7 +140,7 @@ export class DirectedEdge extends Edge {
    * Is the edge a loop?
    * This assumes no key collisions across the whole dataset.
    */
-   override get isLoop(): boolean {
+  override get isLoop(): boolean {
     return this.h.key == this.t.key;
   }
 
