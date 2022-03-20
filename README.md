@@ -82,7 +82,7 @@ This hierarchy can be used to limit what kinds of edges can be added to a graph.
 
 #### Labled Edges
 
-To create a labeled edge, it simply derive a child class that has a label:
+To create a labeled edge, simply derive a child class that has a label:
 
 ```
 export class LabeledArrow extends DirectedEdge {
@@ -96,7 +96,17 @@ export class LabeledArrow extends DirectedEdge {
 ```
 
 While it would be possible to create a mixin, the mixin wouldn't be able to change
-the constructor signature. 
+the constructor signature, but it would be nearly as simple:
+
+```
+type EdgeConstructor = new (...args: any[]) => Edge;
+
+export function Labeled<T extends EdgeConstructor>(Base: T) {
+  return class Labeled extends Base {
+    public label: string;
+  }
+}
+```
 
 ### Mixins
 
