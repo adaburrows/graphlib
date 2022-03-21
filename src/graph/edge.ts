@@ -112,7 +112,8 @@ export class UndirectedEdge extends Edge {
 
 /**
  * Directed edge:
- *   Has morphisms h and t mapping to vertex elements.
+ *   Has morphisms t and h mapping to vertex elements.
+ *   Points from t(ail) --> h(ead)
  */
 export class DirectedEdge extends Edge {
   constructor(vertex_pair: VertexPair) {
@@ -120,19 +121,19 @@ export class DirectedEdge extends Edge {
     this.vertices[0] = vertex_pair;
   }
 
-  get h(): IVertex {
+  get t(): IVertex {
     return this.vertices[0][0];
   }
 
-  set h(v: IVertex) {
+  set t(v: IVertex) {
     this.vertices[0][0] = v;
   }
 
-  get t(): IVertex {
+  get h(): IVertex {
     return this.vertices[0][1];
   }
 
-  set t(v: IVertex) {
+  set h(v: IVertex) {
     this.vertices[0][1] = v;
   }
 
@@ -148,14 +149,14 @@ export class DirectedEdge extends Edge {
    * Returns a directed hyperedge.
    */
   public toDirectedHyperedge(): DirectedHyperedge {
-    return new DirectedHyperedge([this.h], [this.t]);
+    return new DirectedHyperedge([this.t], [this.h]);
   }
 
   /**
    * Returns an undirected edge.
    */
   public toUndirectedEdge(): UndirectedEdge {
-    return new UndirectedEdge([this.h, this.t]);
+    return new UndirectedEdge([this.t, this.h]);
   }
 }
 
@@ -204,7 +205,9 @@ export class UndirectedHyperedge extends Hyperedge {}
 
 /**
  * Directed hyperedge:
- *  Extends the undirected hyperedge to be a directed hyperedge.
+ *   Extends the undirected hyperedge to be a directed hyperedge.
+ *   Has morphisms t and h mapping to vertex elements.
+ *   Points from t(ail) --> h(ead)
  */
 export class DirectedHyperedge extends Hyperedge {
   constructor(h: VertexSet, t: VertexSet) {
@@ -212,19 +215,19 @@ export class DirectedHyperedge extends Hyperedge {
     this.vertices[1] = t;
   }
 
-  get h(): VertexSet {
+  get t(): VertexSet {
     return this.vertices[0];
   }
 
-  set h(v: VertexSet) {
+  set t(v: VertexSet) {
     this.vertices[0] = v;
   }
 
-  get t(): VertexSet {
+  get h(): VertexSet {
     return this.vertices[1];
   }
 
-  set t(v: VertexSet) {
+  set h(v: VertexSet) {
     this.vertices[1] = v;
   }
 

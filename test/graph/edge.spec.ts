@@ -60,8 +60,8 @@ describe('UndirectedEdge should accept a vertex pair and', () => {
     const E = new UndirectedEdge([a, b]);
     const D = E.toRight();
     expect(D instanceof DirectedEdge).toBe(true);
-    expect(D.h).toEqual(a);
-    expect(D.t).toEqual(b);
+    expect(D.t).toEqual(a);
+    expect(D.h).toEqual(b);
   });
 
   it('should map to a left oriented directed edge', () => {
@@ -70,8 +70,8 @@ describe('UndirectedEdge should accept a vertex pair and', () => {
     const E = new UndirectedEdge([a, b]);
     const D = E.toLeft();
     expect(D instanceof DirectedEdge).toBe(true);
-    expect(D.h).toEqual(b);
-    expect(D.t).toEqual(a);
+    expect(D.t).toEqual(b);
+    expect(D.h).toEqual(a);
   });
 
   it('should map to a right oriented directed edge', () => {
@@ -80,8 +80,8 @@ describe('UndirectedEdge should accept a vertex pair and', () => {
     const E = new UndirectedEdge([a, b]);
     const D = E.toRightHyperedge();
     expect(D instanceof DirectedHyperedge).toBe(true);
-    expect(D.h).toEqual([a]);
-    expect(D.t).toEqual([b]);
+    expect(D.t).toEqual([a]);
+    expect(D.h).toEqual([b]);
   });
 
   it('should map to a left oriented directed hyperedge', () => {
@@ -90,8 +90,8 @@ describe('UndirectedEdge should accept a vertex pair and', () => {
     const E = new UndirectedEdge([a, b]);
     const D = E.toLeftHyperedge();
     expect(D instanceof DirectedHyperedge).toBe(true);
-    expect(D.h).toEqual([b]);
-    expect(D.t).toEqual([a]);
+    expect(D.t).toEqual([b]);
+    expect(D.h).toEqual([a]);
   });
 
   it('should map to a hyperedge', () => {
@@ -109,7 +109,7 @@ describe('DirectedEdge should accept a vertex pair and', () => {
     const a = new KeyVertex('A');
     const b = new KeyVertex('B');
     const E = new DirectedEdge([a, b]);
-    expect(E.h).toEqual(a);
+    expect(E.h).toEqual(b);
   });
 
   it('should set the head element with the h setter', () => {
@@ -121,14 +121,14 @@ describe('DirectedEdge should accept a vertex pair and', () => {
     expect(E.h).toEqual(c);
   });
 
-  it('should return the target element with the t morphism', () => {
+  it('should return the tail element with the t morphism', () => {
     const a = new KeyVertex('A');
     const b = new KeyVertex('B');
     const E = new DirectedEdge([a, b]);
-    expect(E.t).toEqual(b);
+    expect(E.t).toEqual(a);
   });
 
-  it('should set the target element with the t setter', () => {
+  it('should set the tail element with the t setter', () => {
     const a = new KeyVertex('A');
     const b = new KeyVertex('B');
     const c = new KeyVertex('C');
@@ -150,8 +150,8 @@ describe('DirectedEdge should accept a vertex pair and', () => {
     const E = new DirectedEdge([a, b]);
     const D = E.toDirectedHyperedge();
     expect(D instanceof DirectedHyperedge).toBe(true);
-    expect(D.h).toEqual([a]);
-    expect(D.t).toEqual([b]);
+    expect(D.t).toEqual([a]);
+    expect(D.h).toEqual([b]);
   });
 
   it('should map to an undirected edge', () => {
@@ -200,14 +200,14 @@ describe('DirectedHyperedge should', () => {
     const labels = ['A', 'B', 'C', 'D'];
     const nodes = labels.map((x) => new KeyVertex(x));
     const E = new DirectedHyperedge(nodes.slice(0,2), nodes.slice(2,4));
-    expect(E.h).toEqual(nodes.slice(0,2));
+    expect(E.h).toEqual(nodes.slice(2,4));
   });
 
   /*
    * ┌─┐  ┌─┐    ┌─┐  ┌─┐
-   * │A│  │C│    │E│  │C│
+   * │A│  │C│    │A│  │E│
    * │ │->│ │ => │ │->│ │ 
-   * │B│  │D│    │F│  │D│
+   * │B│  │D│    │B│  │F│
    * └─┘  └─┘    └─┘  └─┘
    */
   it('should set the head set with the h setter', () => {
@@ -218,21 +218,21 @@ describe('DirectedHyperedge should', () => {
     expect(E.h).toEqual(nodes.slice(4,6));
   });
 
-  it('should return the target set with the t morphism', () => {
+  it('should return the tail set with the t morphism', () => {
     const labels = ['A', 'B', 'C', 'D'];
     const nodes = labels.map((x) => new KeyVertex(x));
     const E = new DirectedHyperedge(nodes.slice(0,2), nodes.slice(2,4));
-    expect(E.t).toEqual(nodes.slice(2,4));
+    expect(E.t).toEqual(nodes.slice(0,2));
   });
 
   /*
    * ┌─┐  ┌─┐    ┌─┐  ┌─┐
-   * │A│  │C│    │A│  │E│
+   * │A│  │C│    │E│  │C│
    * │ │->│ │ => │ │->│ │ 
-   * │B│  │D│    │B│  │F│
+   * │B│  │D│    │F│  │D│
    * └─┘  └─┘    └─┘  └─┘
    */
-  it('should set the target set with the t setter', () => {
+  it('should set the tail set with the t setter', () => {
     const labels = ['A', 'B', 'C', 'D','E', 'F'];
     const nodes = labels.map((x) => new KeyVertex(x));
     const E = new DirectedHyperedge(nodes.slice(0,2), nodes.slice(2,4));
