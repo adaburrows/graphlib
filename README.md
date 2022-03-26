@@ -38,9 +38,8 @@ a similar term called a cycle).
 
 ### Vertices
 
-There is currently no base class that all vertices derrive from. The idea is that
-most vertex types will be application specific. The only restriction is that it
-must implement `IVertex`.
+All vertices derrive from the `Vertex` class. The idea is that most vertex types
+will be application specific. The basic vertex classes already implemented are:
 
 * `DataVertex<T>` &mdash; A basic vertex that allows any kind of data to be stored
 as long as a corresponding `key_accessor` is provided.
@@ -50,12 +49,13 @@ as long as a corresponding `key_accessor` is provided.
 Here is an example vertex class used in the tests:
 
 ```
-class Datum implements IVertex {
+class Datum extends Vertex {
   public id: number;
   public name: string;
   public notes: string;
 
   constructor(id: number, name: string, notes: string) {
+    super();
     this.id = id;
     this.name = name;
     this.notes = notes;

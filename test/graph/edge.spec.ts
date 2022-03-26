@@ -1,5 +1,4 @@
 import {
-  KeyVertex,
   UndirectedEdge,
   DirectedEdge,
   UndirectedHyperedge,
@@ -14,168 +13,132 @@ break anything.
 
 */
 
-describe('UndirectedEdge should accept a vertex pair and', () => {
+describe('UndirectedEdge should accept a vertex key pair and', () => {
   it ('should return the first element with the x morphism', () => {
-    const a = new KeyVertex('A');
-    const b = new KeyVertex('B');
-    const E = new UndirectedEdge([a, b]);
-    expect(E.x).toEqual(a);
+    const E = new UndirectedEdge(['A', 'B']);
+    expect(E.x).toEqual('A');
   });
 
   it('should set the first element with the x setter', () => {
-    const a = new KeyVertex('A');
-    const b = new KeyVertex('B');
-    const c = new KeyVertex('C');
-    const E = new UndirectedEdge([a, b]);
-    E.x = c;
-    expect(E.x).toEqual(c);
+    const E = new UndirectedEdge(['A', 'B']);
+    E.x = 'C';
+    expect(E.x).toEqual('C');
   });
 
   it('should return the second element with the y morphism', () => {
-    const a = new KeyVertex('A');
-    const b = new KeyVertex('B');
-    const E = new UndirectedEdge([a, b]);
-    expect(E.y).toEqual(b);
+    const E = new UndirectedEdge(['A', 'B']);
+    expect(E.y).toEqual('B');
   });
 
   it('should set the second element with the y setter', () => {
-    const a = new KeyVertex('A');
-    const b = new KeyVertex('B');
-    const c = new KeyVertex('C');
-    const E = new UndirectedEdge([a, b]);
-    E.y = c;
-    expect(E.y).toEqual(c);
+    const E = new UndirectedEdge(['A', 'B']);
+    E.y = 'C';
+    expect(E.y).toEqual('C');
   });
 
   it('should indicate if the edge is a loop', () => {
-    const a = new KeyVertex('A');
-    const b = new KeyVertex('A');
-    const E = new UndirectedEdge([a, b]);
+    const E = new UndirectedEdge(['A', 'A']);
+    const F = new UndirectedEdge([1,1]);
     expect(E.isLoop).toBe(true);
+    expect(F.isLoop).toBe(true);
   });
 
   it('should map to a right oriented directed edge', () => {
-    const a = new KeyVertex('A');
-    const b = new KeyVertex('B');
-    const E = new UndirectedEdge([a, b]);
+    const E = new UndirectedEdge(['A', 'B']);
     const D = E.toRight();
     expect(D instanceof DirectedEdge).toBe(true);
-    expect(D.t).toEqual(a);
-    expect(D.h).toEqual(b);
+    expect(D.t).toEqual('A');
+    expect(D.h).toEqual('B');
   });
 
   it('should map to a left oriented directed edge', () => {
-    const a = new KeyVertex('A');
-    const b = new KeyVertex('B');
-    const E = new UndirectedEdge([a, b]);
+    const E = new UndirectedEdge(['A', 'B']);
     const D = E.toLeft();
     expect(D instanceof DirectedEdge).toBe(true);
-    expect(D.t).toEqual(b);
-    expect(D.h).toEqual(a);
+    expect(D.t).toEqual('B');
+    expect(D.h).toEqual('A');
   });
 
   it('should map to a right oriented directed edge', () => {
-    const a = new KeyVertex('A');
-    const b = new KeyVertex('B');
-    const E = new UndirectedEdge([a, b]);
+    const E = new UndirectedEdge(['A', 'B']);
     const D = E.toRightHyperedge();
     expect(D instanceof DirectedHyperedge).toBe(true);
-    expect(D.t).toEqual([a]);
-    expect(D.h).toEqual([b]);
+    expect(D.t).toEqual(['A']);
+    expect(D.h).toEqual(['B']);
   });
 
   it('should map to a left oriented directed hyperedge', () => {
-    const a = new KeyVertex('A');
-    const b = new KeyVertex('B');
-    const E = new UndirectedEdge([a, b]);
+    const E = new UndirectedEdge(['A', 'B']);
     const D = E.toLeftHyperedge();
     expect(D instanceof DirectedHyperedge).toBe(true);
-    expect(D.t).toEqual([b]);
-    expect(D.h).toEqual([a]);
+    expect(D.t).toEqual(['B']);
+    expect(D.h).toEqual(['A']);
   });
 
   it('should map to a hyperedge', () => {
-    const a = new KeyVertex('A');
-    const b = new KeyVertex('B');
-    const E = new UndirectedEdge([a, b]);
+    const E = new UndirectedEdge(['A', 'B']);
     const D = E.toUndirectedHyperedge();
     expect(D instanceof UndirectedHyperedge).toBe(true);
-    expect(D.vertices[0]).toEqual([a,b]);
+    expect(D.vertices[0]).toEqual(['A','B']);
   });
 });
 
 describe('DirectedEdge should accept a vertex pair and', () => {
   it('should return the head element with the h morphism', () => {
-    const a = new KeyVertex('A');
-    const b = new KeyVertex('B');
-    const E = new DirectedEdge([a, b]);
-    expect(E.h).toEqual(b);
+    const E = new DirectedEdge(['A', 'B']);
+    expect(E.h).toEqual('B');
   });
 
   it('should set the head element with the h setter', () => {
-    const a = new KeyVertex('A');
-    const b = new KeyVertex('B');
-    const c = new KeyVertex('C');
-    const E = new DirectedEdge([a, b]);
-    E.h = c;
-    expect(E.h).toEqual(c);
+    const E = new DirectedEdge(['A', 'B']);
+    E.h = 'C';
+    expect(E.h).toEqual('C');
   });
 
   it('should return the tail element with the t morphism', () => {
-    const a = new KeyVertex('A');
-    const b = new KeyVertex('B');
-    const E = new DirectedEdge([a, b]);
-    expect(E.t).toEqual(a);
+    const E = new DirectedEdge(['A', 'B']);
+    expect(E.t).toEqual('A');
   });
 
   it('should set the tail element with the t setter', () => {
-    const a = new KeyVertex('A');
-    const b = new KeyVertex('B');
-    const c = new KeyVertex('C');
-    const E = new DirectedEdge([a, b]);
-    E.t = c;
-    expect(E.t).toEqual(c);
+    const E = new DirectedEdge(['A', 'B']);
+    E.t = 'C';
+    expect(E.t).toEqual('C');
   });
 
   it('should indicate if the edge is a loop', () => {
-    const a = new KeyVertex('A');
-    const b = new KeyVertex('A');
-    const E = new DirectedEdge([a, b]);
+    const E = new DirectedEdge(['A', 'A']);
+    const F = new DirectedEdge([1,1]);
     expect(E.isLoop).toBe(true);
+    expect(F.isLoop).toBe(true);
   });
 
   it('should map to a directed hyperedge', () => {
-    const a = new KeyVertex('A');
-    const b = new KeyVertex('B');
-    const E = new DirectedEdge([a, b]);
+    const E = new DirectedEdge(['A', 'B']);
     const D = E.toDirectedHyperedge();
     expect(D instanceof DirectedHyperedge).toBe(true);
-    expect(D.t).toEqual([a]);
-    expect(D.h).toEqual([b]);
+    expect(D.t).toEqual(['A']);
+    expect(D.h).toEqual(['B']);
   });
 
   it('should map to an undirected edge', () => {
-    const a = new KeyVertex('A');
-    const b = new KeyVertex('B');
-    const E = new DirectedEdge([a, b]);
+    const E = new DirectedEdge(['A', 'B']);
     const D = E.toUndirectedEdge();
     expect(D instanceof UndirectedEdge).toBe(true);
-    expect(D.x).toEqual(a);
-    expect(D.y).toEqual(b);
+    expect(D.x).toEqual('A');
+    expect(D.y).toEqual('B');
   });
 });
 
 describe('UndirectedHyperedge', () => {
   it('should return the size of the edge', () => {
-    const labels = ['A', 'B', 'C', 'D'];
-    const nodes = labels.map((x) => new KeyVertex(x));
+    const nodes = ['A', 'B', 'C', 'D'];
     const E = new UndirectedHyperedge(nodes);
     expect(E.size).toEqual(4);
   });
 
   it('should indicate if the edge is a loop', () => {
-    const labels = ['A', 'A'];
-    const nodes = labels.map((x) => new KeyVertex(x));
+    const nodes = ['A', 'A'];
     const E = new UndirectedHyperedge(nodes);
     expect(E.isLoop).toBe(true);
   });
@@ -190,15 +153,13 @@ describe('DirectedHyperedge should', () => {
    * └─┘  └─┘
    */
   it('should return the size of the edge', () => {
-    const labels = ['A', 'B', 'C', 'D'];
-    const nodes = labels.map((x) => new KeyVertex(x));
+    const nodes = ['A', 'B', 'C', 'D'];
     const E = new DirectedHyperedge(nodes.slice(0,2), nodes.slice(2,4));
     expect(E.size).toEqual(4);
   });
   
   it('should return the head set with the h morpism', () => {
-    const labels = ['A', 'B', 'C', 'D'];
-    const nodes = labels.map((x) => new KeyVertex(x));
+    const nodes = ['A', 'B', 'C', 'D'];
     const E = new DirectedHyperedge(nodes.slice(0,2), nodes.slice(2,4));
     expect(E.h).toEqual(nodes.slice(2,4));
   });
@@ -211,16 +172,14 @@ describe('DirectedHyperedge should', () => {
    * └─┘  └─┘    └─┘  └─┘
    */
   it('should set the head set with the h setter', () => {
-    const labels = ['A', 'B', 'C', 'D','E', 'F'];
-    const nodes = labels.map((x) => new KeyVertex(x));
+    const nodes = ['A', 'B', 'C', 'D','E', 'F'];
     const E = new DirectedHyperedge(nodes.slice(0,2), nodes.slice(2,4));
     E.h = nodes.slice(4,6);
     expect(E.h).toEqual(nodes.slice(4,6));
   });
 
   it('should return the tail set with the t morphism', () => {
-    const labels = ['A', 'B', 'C', 'D'];
-    const nodes = labels.map((x) => new KeyVertex(x));
+    const nodes = ['A', 'B', 'C', 'D'];
     const E = new DirectedHyperedge(nodes.slice(0,2), nodes.slice(2,4));
     expect(E.t).toEqual(nodes.slice(0,2));
   });
@@ -233,16 +192,14 @@ describe('DirectedHyperedge should', () => {
    * └─┘  └─┘    └─┘  └─┘
    */
   it('should set the tail set with the t setter', () => {
-    const labels = ['A', 'B', 'C', 'D','E', 'F'];
-    const nodes = labels.map((x) => new KeyVertex(x));
+    const nodes = ['A', 'B', 'C', 'D','E', 'F'];
     const E = new DirectedHyperedge(nodes.slice(0,2), nodes.slice(2,4));
     E.t = nodes.slice(4,6);
     expect(E.t).toEqual(nodes.slice(4,6));
   });
 
   it('should indicate if the edge is a loop', () => {
-    const labels = ['A'];
-    const nodes = labels.map((x) => new KeyVertex(x));
+    const nodes = ['A'];
     const E = new DirectedHyperedge(nodes, nodes);
     expect(E.isLoop).toBe(true);
   });

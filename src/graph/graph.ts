@@ -1,4 +1,4 @@
-import { IVertex, VertexSet } from './vertex';
+import { Vertex, VertexKeyType, VertexSet } from './vertex';
 import { Edge, UndirectedEdge, DirectedEdge, UndirectedHyperedge, DirectedHyperedge } from './edge';
 
 /**
@@ -7,26 +7,48 @@ import { Edge, UndirectedEdge, DirectedEdge, UndirectedHyperedge, DirectedHypere
  * graph based on the type parameters and additional restraints placed on the
  * edges.
  */
-export class Graph<VertexType extends IVertex, EdgeType extends Edge> {
-  public vertices: VertexType[];
+export class Graph<VertexType extends Vertex, EdgeType extends Edge> {
+  public vertices: Map<VertexKeyType, VertexType>;
   public edges: EdgeType[];
 
   constructor() {
-    this.vertices = new Array<VertexType>();
+    this.vertices = new Map<VertexKeyType, VertexType>();
     this.edges = new Array<EdgeType>();
   }
 
   /**
-   * Add a vertex to the graph.
+   * Add a vertex to the graph. Assumes that all keys must be unique.
    * @param vertex 
    * @returns
    */
   public addVertex(vertex: VertexType): this {
     // Uses valueOf to do comparisons at the key level
-    if (this.vertices.indexOf(vertex) === -1) {
-      this.vertices.push(vertex);
+    if (!this.vertices.has(vertex.key)) {
+      this.vertices.set(vertex.key, vertex);
     }
     return this;
+  }
+
+  /**
+   * Check to see if a graph has a particular vertex
+   * @param vertex
+   * @returns
+   */
+  public hasVertex(vertex: Vertex | VertexKeyType): boolean {
+    if (vertex instanceof Vertex) {
+      return this.vertices.has(vertex.key);
+    } else {
+      return this.vertices.has(vertex as VertexKeyType);
+    }
+  }
+
+  /**
+   * Get a particular node by key
+   * @param vertexKey
+   * @returns
+   */
+  public getVertex(vertexKey: VertexKeyType): Vertex | undefined {
+    return this.vertices.get(vertexKey);
   }
 
   /**
@@ -46,7 +68,7 @@ export class Graph<VertexType extends IVertex, EdgeType extends Edge> {
    * Used to determine size of the adjacency matrix.
    */
    public get order(): number {
-    return this.vertices.length;
+    return this.vertices.size;
   }
 
   /**
@@ -98,7 +120,7 @@ export class Graph<VertexType extends IVertex, EdgeType extends Edge> {
 /**
  * Constructor type used for the mix-in pattern
  */
-type GraphConstructor = new (...args: any[]) => Graph<IVertex, Edge>;
+type GraphConstructor = new (...args: any[]) => Graph<Vertex, Edge>;
 
 /**
  * Mix-in to disallow loops
@@ -129,10 +151,10 @@ export function Rooted<T extends GraphConstructor>(Base: T) {
 
     constructor(...args: any[]) {
       super(...args);
-      this.roots = new Array<IVertex>();
+      this.roots = new Array<Vertex>();
     }
 
-    public addRoot(root: IVertex) {
+    public addRoot(root: Vertex) {
       this.roots.push(root);
     }
 

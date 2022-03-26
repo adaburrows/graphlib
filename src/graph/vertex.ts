@@ -4,18 +4,29 @@
 export type VertexKeyType = number | string | symbol;
 
 /**
- * Base Vertex Interface
+ * Vertex Interface
  */
 export interface IVertex {
   get key(): VertexKeyType;
 }
 
 /**
- * types for vertex sets
+ * Base Vertex Class
+ */
+export abstract class Vertex implements IVertex {
+  abstract get key(): VertexKeyType;
+}
+
+/**
+ * Types for vertex sets
  */
 export type VertexPair = [IVertex, IVertex];
 export type VertexSet = IVertex[];
 export type VertexSetSet = VertexSet[];
+
+export type VKPair = [VertexKeyType, VertexKeyType];
+export type VKSet = Array<VertexKeyType>;
+export type VKSetSet = [VKSet, VKSet];
 
 /**
  * This is a flexible graph vertex class. By default it can just use strings or
@@ -28,11 +39,12 @@ export type VertexSetSet = VertexSet[];
  * visit multiple types of objects along the travesed path as long as each object
  * has a unique field which can be used as a key.
  */
-export class DataVertex<T> implements IVertex {
+export class DataVertex<T> extends Vertex {
   protected _data: T;
   protected _key_accessor: (x: T) => VertexKeyType;
  
   constructor(data: T, key_accessor: (x: T) => VertexKeyType) {
+    super();
     this._data = data;
     this._key_accessor = key_accessor;
   }
@@ -69,14 +81,14 @@ export class DataVertex<T> implements IVertex {
   /**
    * Returns the key
    */
-  public valueOf(): VertexKeyType {
+  public override valueOf(): VertexKeyType {
     return this.key;
   }
 
   /**
    * Returns the key as the string representation
    */
-  public toString(): string {
+  public override toString(): string {
     return this.key.toString();
   }
 }

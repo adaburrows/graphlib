@@ -1,14 +1,15 @@
-import { Graph, IVertex, Edge, UndirectedEdge, DirectedEdge, UndirectedHyperedge, DirectedHyperedge, NoLoops, Rooted } from "../../src";
+import { Graph, Vertex, Edge, UndirectedEdge, DirectedEdge, UndirectedHyperedge, DirectedHyperedge, NoLoops, Rooted } from "../../src";
 
 /**
  * Example custom vertex type used for testing
  */
-class Datum implements IVertex {
+class Datum extends Vertex {
   public id: number;
   public name: string;
   public notes: string;
 
   constructor(id: number, name: string, notes: string) {
+    super();
     this.id = id;
     this.name = name;
     this.notes = notes;
@@ -39,7 +40,7 @@ describe('The Graph Object', () => {
   test('should allow undirected edges', () => {
     const graph = new Graph<Datum, Edge>();
     graph.addVertices(data);
-    const edge = new UndirectedEdge([data[1], data[2]]);
+    const edge = new UndirectedEdge([data[1].key, data[2].key]);
     graph.addEdge(edge);
     expect(graph.size).toEqual(1);
   });
@@ -47,7 +48,7 @@ describe('The Graph Object', () => {
   test('should allow directed edges', () => {
     const graph = new Graph<Datum, Edge>();
     graph.addVertices(data);
-    const edge = new DirectedEdge([data[1], data[2]]);
+    const edge = new DirectedEdge([data[1].key, data[2].key]);
     graph.addEdge(edge);
     expect(graph.size).toEqual(1);
   });
@@ -55,7 +56,7 @@ describe('The Graph Object', () => {
   test('should allow undirected hyperedges', () => {
     const graph = new Graph<Datum, Edge>();
     graph.addVertices(data);
-    const edge = new UndirectedHyperedge([data[1], data[2]]);
+    const edge = new UndirectedHyperedge([data[1].key, data[2].key]);
     graph.addEdge(edge);
     expect(graph.size).toEqual(1);
   });
@@ -63,7 +64,7 @@ describe('The Graph Object', () => {
   test('should allow directed hyperedges', () => {
     const graph = new Graph<Datum, Edge>();
     graph.addVertices(data);
-    const edge = new DirectedHyperedge([data[1]], [data[2]]);
+    const edge = new DirectedHyperedge([data[1].key], [data[2].key]);
     graph.addEdge(edge);
     expect(graph.size).toEqual(1);
   });
@@ -74,13 +75,13 @@ describe('The Graph Object', () => {
     graph.addVertices(data);
 
     // Add edges
-    const undirectedEdge = new UndirectedEdge([data[1], data[2]]);
+    const undirectedEdge = new UndirectedEdge([data[1].key, data[2].key]);
     graph.addEdge(undirectedEdge);
-    const directedEdge = new DirectedEdge([data[1], data[2]]);
+    const directedEdge = new DirectedEdge([data[1].key, data[2].key]);
     graph.addEdge(directedEdge);
-    const undirectedHyperedge = new UndirectedHyperedge([data[1], data[2]]);
+    const undirectedHyperedge = new UndirectedHyperedge([data[1].key, data[2].key]);
     graph.addEdge(undirectedHyperedge);
-    const directedHyperedge = new DirectedHyperedge([data[1]], [data[2]]);
+    const directedHyperedge = new DirectedHyperedge([data[1].key], [data[2].key]);
     graph.addEdge(directedHyperedge);
 
     expect(graph.size).toEqual(4);
@@ -88,6 +89,35 @@ describe('The Graph Object', () => {
     expect(graph.sizeDirectedEdge).toEqual(1);
     expect(graph.sizeUndirectedHyperedge).toEqual(1);
     expect(graph.sizeDirectedHyperedge).toEqual(1);
+  });
+
+  test('should determine if it does or does not have a node added already', () => {
+    // Setup graph and add data
+    const graph = new Graph<Datum, Edge>();
+    graph.addVertices(data);
+    const node = new Datum(5, "Tlalli", "Means land");
+
+    expect(graph.hasVertex(data[0])).toBe(true);
+    expect(graph.hasVertex(node)).toBe(false);
+  });
+
+  test('should determine by key if it does or does not have a node added already', () => {
+    // Setup graph and add data
+    const graph = new Graph<Datum, Edge>();
+    graph.addVertices(data);
+    const node = new Datum(5, "Tlalli", "Means land");
+
+    expect(graph.hasVertex(1)).toBe(true);
+    expect(graph.hasVertex(node.key)).toBe(false);
+  });
+
+  test('should retreive a node by key', () => {
+    // Setup graph and add data
+    const graph = new Graph<Datum, Edge>();
+    graph.addVertices(data);
+
+    expect(graph.getVertex(1)).toEqual(data[0]);
+    expect(graph.getVertex(6)).toBeUndefined();
   });
 });
 
@@ -107,7 +137,7 @@ describe('A graph using NoLoops', () => {
     // Setup graph and add data
     const graph = new SimpleGraphNoLoops();
     graph.addVertices(data);
-    const undirectedEdge = new UndirectedEdge([data[1], data[1]]);
+    const undirectedEdge = new UndirectedEdge([data[1].key, data[1].key]);
     expect(() => {
       graph.addEdge(undirectedEdge);
     }).toThrow("A loop was detected in the data and the current graph disallows loops.");

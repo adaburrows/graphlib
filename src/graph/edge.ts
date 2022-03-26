@@ -1,10 +1,10 @@
-import { IVertex, VertexPair, VertexSet, VertexSetSet } from './vertex';
+import {VertexKeyType, VKSetSet, VKSet, VKPair } from './vertex';
 
 /**
  * Interface for edges.
  */
 export interface IEdge {
-  vertices: VertexSetSet;
+  vertices: VKSetSet;
   isLoop: boolean;
 }
 
@@ -20,9 +20,9 @@ export interface IHyperedge extends IEdge {
  * The base edge type from which all edges are derrived from.
  */
 export abstract class Edge implements IEdge{
-  public vertices: VertexSetSet;
+  public vertices: VKSetSet;
   constructor() {
-    this.vertices = new Array<VertexSet>(2);
+    this.vertices = [new Array<VertexKeyType>(), new Array<VertexKeyType>()];
   }
 
   get isLoop(): boolean {
@@ -39,24 +39,27 @@ export abstract class Edge implements IEdge{
  *   and oriented directed hyperedges
  */
 export class UndirectedEdge extends Edge {
-  constructor(vertex_pair: VertexPair) {
+  constructor(vertexPair: VKPair) {
     super();
-    this.vertices[0] = vertex_pair;
+
+    // This memory layout also maps directly to an UndirectedHyperedge
+    this.vertices[0][0] = vertexPair[0];
+    this.vertices[0][1] = vertexPair[1];
   }
 
-  get x(): IVertex {
+  get x(): VertexKeyType {
     return this.vertices[0][0];
   }
 
-  set x(v: IVertex) {
+  set x(v: VertexKeyType) {
     this.vertices[0][0] = v;
   }
 
-  get y(): IVertex {
+  get y(): VertexKeyType {
     return this.vertices[0][1];
   }
 
-  set y(v: IVertex) {
+  set y(v: VertexKeyType) {
     this.vertices[0][1] = v;
   }
 
@@ -71,7 +74,7 @@ export class UndirectedEdge extends Edge {
    * things in an ArrayBuffer.
    */
   override get isLoop(): boolean {
-    return this.x.key == this.y.key;
+    return this.x == this.y;
   }
 
   /**
@@ -104,6 +107,7 @@ export class UndirectedEdge extends Edge {
 
   /**
    * Returns an undirected hyperedge.
+   * TODO: just copy this.vertices since it has the right structure
    */
   public toUndirectedHyperedge(): Hyperedge{
     return new UndirectedHyperedge([this.x, this.y]);
@@ -116,25 +120,28 @@ export class UndirectedEdge extends Edge {
  *   Points from t(ail) --> h(ead)
  */
 export class DirectedEdge extends Edge {
-  constructor(vertex_pair: VertexPair) {
+  constructor(vertexPair: VKPair) {
     super();
-    this.vertices[0] = vertex_pair;
+
+    // This memory layout also maps directly to a DirectedHyperedge
+    this.vertices[0][0] = vertexPair[0];
+    this.vertices[1][0] = vertexPair[1];
   }
 
-  get t(): IVertex {
+  get t(): VertexKeyType {
     return this.vertices[0][0];
   }
 
-  set t(v: IVertex) {
+  set t(v: VertexKeyType) {
     this.vertices[0][0] = v;
   }
 
-  get h(): IVertex {
-    return this.vertices[0][1];
+  get h(): VertexKeyType {
+    return this.vertices[1][0];
   }
 
-  set h(v: IVertex) {
-    this.vertices[0][1] = v;
+  set h(v: VertexKeyType) {
+    this.vertices[1][0] = v;
   }
 
   /**
@@ -142,11 +149,12 @@ export class DirectedEdge extends Edge {
    * This assumes no key collisions across the whole dataset.
    */
   override get isLoop(): boolean {
-    return this.h.key == this.t.key;
+    return this.h == this.t;
   }
 
   /**
    * Returns a directed hyperedge.
+   * TODO: just copy this.vertices since it has the right structure
    */
   public toDirectedHyperedge(): DirectedHyperedge {
     return new DirectedHyperedge([this.t], [this.h]);
@@ -154,6 +162,8 @@ export class DirectedEdge extends Edge {
 
   /**
    * Returns an undirected edge.
+   * TODO: If the underlying data structure is looked at as a matrix, this is
+   * just the transpose, but at size two, it's not worth thinking about too much.
    */
   public toUndirectedEdge(): UndirectedEdge {
     return new UndirectedEdge([this.t, this.h]);
@@ -164,9 +174,11 @@ export class DirectedEdge extends Edge {
  * The base hyperedge type from which all hyperedges are derrived.
  */
 export abstract class Hyperedge extends Edge implements IHyperedge {
-  constructor(vertices: VertexSet) {
+  constructor(vertices: VKSet) {
     super();
-    this.vertices[0] = vertices;
+
+    // Make a shallow copy like we do above
+    this.vertices[0] = [...vertices];
   }
 
   public get size(): number {
@@ -181,16 +193,16 @@ export abstract class Hyperedge extends Edge implements IHyperedge {
    * need to compare `this.size) instead of `nonRepeats`.
    */
   override get isLoop(): boolean {
-    const nonRepeats = this.vertices[0].reduce<VertexSet>((accum: VertexSet, vertex: IVertex): VertexSet => {
+    const nonRepeats = this.vertices[0].reduce<VKSet>((accum: VKSet, vertex: VertexKeyType): VKSet => {
       if(accum.length) {
-        if(accum[0].key != vertex.key) {
+        if(accum[0] != vertex) {
           accum.push(vertex);
         }
       } else {
         accum.push(vertex)
       }
       return accum;
-    }, new Array<IVertex>());
+    }, new Array<VertexKeyType>());
     return nonRepeats.length == 1;
   }
 
@@ -210,24 +222,26 @@ export class UndirectedHyperedge extends Hyperedge {}
  *   Points from t(ail) --> h(ead)
  */
 export class DirectedHyperedge extends Hyperedge {
-  constructor(h: VertexSet, t: VertexSet) {
+  constructor(h: VKSet, t: VKSet) {
     super(h);
-    this.vertices[1] = t;
+
+    // Shallow copy as above
+    this.vertices[1] = [...t];
   }
 
-  get t(): VertexSet {
+  get t(): VKSet {
     return this.vertices[0];
   }
 
-  set t(v: VertexSet) {
+  set t(v: VKSet) {
     this.vertices[0] = v;
   }
 
-  get h(): VertexSet {
+  get h(): VKSet {
     return this.vertices[1];
   }
 
-  set h(v: VertexSet) {
+  set h(v: VKSet) {
     this.vertices[1] = v;
   }
 
@@ -245,7 +259,7 @@ export class DirectedHyperedge extends Hyperedge {
    * which order they are in.
    */
    override get isLoop(): boolean {
-    return this.size == 2 && this.h[0].key == this.t[0].key;
+    return this.size == 2 && this.h[0] == this.t[0];
   }
 
   // Q: Should we write a functor going to mutitple directed edges?
