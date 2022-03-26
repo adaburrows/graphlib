@@ -174,11 +174,15 @@ export abstract class Hyperedge extends Edge implements IHyperedge {
   constructor(vertices: VKSet) {
     super();
 
-    /**
-     * TODO: Refactor this out into a helper function that can be called to
-     * remove duplicates in Hyperedge types.
-     */
-    const nonRepeats = vertices.reduce<VKSet>((accum: VKSet, vertex: VertexKeyType): VKSet => {
+    // Shallow copy of unique vertices
+    this.vertices[0] = this.unique(vertices);
+  }
+
+  /**
+   * Remove duplicates in `Hyperedge` `VKSet`s.
+   */
+  protected unique(vertices: VKSet): VKSet {
+    return vertices.reduce<VKSet>((accum: VKSet, vertex: VertexKeyType): VKSet => {
       if(accum.length) {
         if(accum[0] != vertex) {
           accum.push(vertex);
@@ -188,7 +192,6 @@ export abstract class Hyperedge extends Edge implements IHyperedge {
       }
       return accum;
     }, new Array<VertexKeyType>());
-    this.vertices[0] = nonRepeats;
   }
 
   public get size(): number {
@@ -222,8 +225,8 @@ export class DirectedHyperedge extends Hyperedge {
   constructor(h: VKSet, t: VKSet) {
     super(h);
 
-    // Shallow copy as above
-    this.vertices[1] = [...t];
+    // Shallow copy of unique vertices
+    this.vertices[1] = this.unique(t);
   }
 
   get t(): VKSet {
