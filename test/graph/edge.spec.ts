@@ -39,14 +39,14 @@ describe('UndirectedEdge should accept a vertex key pair and', () => {
   it('should indicate if the edge is a loop', () => {
     const E = new UndirectedEdge(['A', 'A']);
     const F = new UndirectedEdge([1,1]);
-    expect(E.isLoop).toBe(true);
-    expect(F.isLoop).toBe(true);
+    expect(E.isLoop).toEqual(true);
+    expect(F.isLoop).toEqual(true);
   });
 
   it('should map to a right oriented directed edge', () => {
     const E = new UndirectedEdge(['A', 'B']);
     const D = E.toRight();
-    expect(D instanceof DirectedEdge).toBe(true);
+    expect(D instanceof DirectedEdge).toEqual(true);
     expect(D.t).toEqual('A');
     expect(D.h).toEqual('B');
   });
@@ -54,7 +54,7 @@ describe('UndirectedEdge should accept a vertex key pair and', () => {
   it('should map to a left oriented directed edge', () => {
     const E = new UndirectedEdge(['A', 'B']);
     const D = E.toLeft();
-    expect(D instanceof DirectedEdge).toBe(true);
+    expect(D instanceof DirectedEdge).toEqual(true);
     expect(D.t).toEqual('B');
     expect(D.h).toEqual('A');
   });
@@ -62,7 +62,7 @@ describe('UndirectedEdge should accept a vertex key pair and', () => {
   it('should map to a right oriented directed edge', () => {
     const E = new UndirectedEdge(['A', 'B']);
     const D = E.toRightHyperedge();
-    expect(D instanceof DirectedHyperedge).toBe(true);
+    expect(D instanceof DirectedHyperedge).toEqual(true);
     expect(D.t).toEqual(['A']);
     expect(D.h).toEqual(['B']);
   });
@@ -70,7 +70,7 @@ describe('UndirectedEdge should accept a vertex key pair and', () => {
   it('should map to a left oriented directed hyperedge', () => {
     const E = new UndirectedEdge(['A', 'B']);
     const D = E.toLeftHyperedge();
-    expect(D instanceof DirectedHyperedge).toBe(true);
+    expect(D instanceof DirectedHyperedge).toEqual(true);
     expect(D.t).toEqual(['B']);
     expect(D.h).toEqual(['A']);
   });
@@ -78,7 +78,7 @@ describe('UndirectedEdge should accept a vertex key pair and', () => {
   it('should map to a hyperedge', () => {
     const E = new UndirectedEdge(['A', 'B']);
     const D = E.toUndirectedHyperedge();
-    expect(D instanceof UndirectedHyperedge).toBe(true);
+    expect(D instanceof UndirectedHyperedge).toEqual(true);
     expect(D.vertices[0]).toEqual(['A','B']);
   });
 });
@@ -109,14 +109,14 @@ describe('DirectedEdge should accept a vertex pair and', () => {
   it('should indicate if the edge is a loop', () => {
     const E = new DirectedEdge(['A', 'A']);
     const F = new DirectedEdge([1,1]);
-    expect(E.isLoop).toBe(true);
-    expect(F.isLoop).toBe(true);
+    expect(E.isLoop).toEqual(true);
+    expect(F.isLoop).toEqual(true);
   });
 
   it('should map to a directed hyperedge', () => {
     const E = new DirectedEdge(['A', 'B']);
     const D = E.toDirectedHyperedge();
-    expect(D instanceof DirectedHyperedge).toBe(true);
+    expect(D instanceof DirectedHyperedge).toEqual(true);
     expect(D.t).toEqual(['A']);
     expect(D.h).toEqual(['B']);
   });
@@ -124,7 +124,7 @@ describe('DirectedEdge should accept a vertex pair and', () => {
   it('should map to an undirected edge', () => {
     const E = new DirectedEdge(['A', 'B']);
     const D = E.toUndirectedEdge();
-    expect(D instanceof UndirectedEdge).toBe(true);
+    expect(D instanceof UndirectedEdge).toEqual(true);
     expect(D.x).toEqual('A');
     expect(D.y).toEqual('B');
   });
@@ -140,7 +140,7 @@ describe('UndirectedHyperedge', () => {
   it('should indicate if the edge is a loop', () => {
     const nodes = ['A', 'A'];
     const E = new UndirectedHyperedge(nodes);
-    expect(E.isLoop).toBe(true);
+    expect(E.isLoop).toEqual(true);
   });
 });
 
@@ -198,9 +198,29 @@ describe('DirectedHyperedge should', () => {
     expect(E.t).toEqual(nodes.slice(4,6));
   });
 
-  it('should indicate if the edge is a loop', () => {
+  it('should indicate if the size 2 edge is a loop', () => {
     const nodes = ['A'];
     const E = new DirectedHyperedge(nodes, nodes);
-    expect(E.isLoop).toBe(true);
+    expect(E.isLoop).toEqual(true);
+    expect(E.t).toEqual(nodes);
+    expect(E.h).toEqual(nodes);
   });
+
+  it('should indicate if the size 4 edge is a loop', () => {
+    const nodes = ['A', 'B'];
+    const E = new DirectedHyperedge(nodes, nodes);
+    expect(E.isLoop).toEqual(true);
+    expect(E.t).toEqual(nodes);
+    expect(E.h).toEqual(nodes);
+  });
+
+  it('should indicate if the size 5 edge is a loop', () => {
+    const nodes1 = ['A', 'B'];
+    const nodes2 = ['A', 'B', 'C'];
+    const E = new DirectedHyperedge(nodes1, nodes2);
+    expect(E.isLoop).toEqual(false);
+    expect(E.t).toEqual(nodes1);
+    expect(E.h).toEqual(nodes2);
+  });
+
 });

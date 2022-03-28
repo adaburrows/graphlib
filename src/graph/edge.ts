@@ -253,13 +253,33 @@ export class DirectedHyperedge extends Hyperedge {
    * Is the edge a loop?
    * This assumes no key collisions across the whole dataset.
    * TODO:
-   * Is a directed hyperedge with size being 2n that loops back to the same set
-   * of n vertices a loop? Probably. We need to have a more robust way
-   * of checking that the two sets have vertices with the same keys no matter
-   * which order they are in.
+   * Is a directed hyperedge a loop if the second edge is a (sub/super)set of the first edge?
    */
-   override get isLoop(): boolean {
-    return this.size == 2 && this.h[0] == this.t[0];
+  override get isLoop(): boolean {
+    const lengthEqual = this.vertices[0].length === this.vertices[1].length;
+
+    // Initialize accumulator with initial check result
+    let loop = lengthEqual;
+
+    // Shortcut the longer check if false
+    if (loop) {
+      // Make shallow copies of the vertex sets
+      let t = [...this.t];
+      let h = [...this.h];
+
+      // Check for membership in the other set
+      for (let e of t) {
+        const i = h.indexOf(e);
+        if (i > 0) {
+          loop &&= true;
+
+          // If it's found, remove it from the copy so there's fewer to compare next time around.
+          h.splice(i, 1);
+        }
+      }
+    }
+
+    return loop;
   }
 
   // Q: Should we write a functor going to mutitple directed edges?
