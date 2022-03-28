@@ -148,8 +148,8 @@ describe('A graph using Rooted', () => {
   test('should allow adding a root', () => {
     class Digraph extends Graph<Datum, DirectedEdge> {}
     const DigraphNoLoops = NoLoops(Digraph);
-    const Tree = Rooted(DigraphNoLoops);
-    const arbol = new Tree();
+    const AlmostTree = Rooted(DigraphNoLoops);
+    const arbol = new AlmostTree();
 
     // Setup graph and add data
     arbol.addVertices(data);
