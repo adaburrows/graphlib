@@ -81,7 +81,7 @@ const dhypergraph = new Graph<KeyVertex, DirectedHyperedge>();
 There are certain mixins which can modify the behavior of the graph. If one isn't
 familiar with the pattern of Typescript mixins, it may seem awkward. With some
 practice, it can be quite natural to work with mixins. In some cases, it will
-prove more problematice to use a mixin and using an 
+prove more problematic to use a mixin compared to deriving a new child class. 
 
 ##### NoLoops
 
