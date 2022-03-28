@@ -97,8 +97,8 @@ describe('The Graph Object', () => {
     graph.addVertices(data);
     const node = new Datum(5, "Tlalli", "Means land");
 
-    expect(graph.hasVertex(data[0])).toBe(true);
-    expect(graph.hasVertex(node)).toBe(false);
+    expect(graph.hasVertex(data[0])).toEqual(true);
+    expect(graph.hasVertex(node)).toEqual(false);
   });
 
   test('should determine by key if it does or does not have a node added already', () => {
@@ -107,8 +107,8 @@ describe('The Graph Object', () => {
     graph.addVertices(data);
     const node = new Datum(5, "Tlalli", "Means land");
 
-    expect(graph.hasVertex(1)).toBe(true);
-    expect(graph.hasVertex(node.key)).toBe(false);
+    expect(graph.hasVertex(1)).toEqual(true);
+    expect(graph.hasVertex(node.key)).toEqual(false);
   });
 
   test('should retreive a node by key', () => {
@@ -154,6 +154,6 @@ describe('A graph using Rooted', () => {
     // Setup graph and add data
     arbol.addVertices(data);
     arbol.addRoot(data[0]);
-    expect(arbol.getRoots()[0]).toBe(data[0]);
+    expect(arbol.getRoots()[0]).toEqual(data[0]);
   });
 });
