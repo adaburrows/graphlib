@@ -23,7 +23,7 @@ const edges = [
   new UndirectedEdge(nodes[2], nodes[0])
 ];
 graph.addVertices(vertices);
-graoh.addEdges(edges);
+graph.addEdges(edges);
 ```
 
 ### Interfaces
