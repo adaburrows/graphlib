@@ -52,6 +52,19 @@ export class Graph<VertexType extends Vertex, EdgeType extends Edge> {
   }
 
   /**
+   * Deletes a particular vertex
+   * @param vertex
+   * @returns
+   */
+  public dropVertex(vertex: Vertex | VertexKeyType): boolean {
+    if (vertex instanceof Vertex) {
+      return this.vertices.delete(vertex.key);
+    } else {
+      return this.vertices.delete(vertex as VertexKeyType);
+    }
+  }
+
+  /**
    * Add vertices to the graph.
    * @param vertices 
    * @returns
