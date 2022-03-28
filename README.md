@@ -184,6 +184,8 @@ export class LabeledArrow extends DirectedEdge {
     this.label = label;
   }
 }
+
+const aSaysHelloToB = new LabeledArrow('Hello', ['a', 'b']);
 ```
 
 While it would be possible to create a mixin, the mixin wouldn't be able to change
@@ -192,13 +194,16 @@ the constructor signature, but it would be nearly as simple:
 ```
 type EdgeConstructor = new (...args: any[]) => Edge;
 
-export function Labeled<T extends EdgeConstructor>(Base: T) {
+function Labeled<T extends EdgeConstructor>(Base: T) {
   return class Labeled extends Base {
-    public label: string;
+    public label: string | null = null;
   }
 }
 
 const ArrowWithLabel = Labeled(DirectedEdge);
+
+const edge = new ArrowWithLabel(['a', 'b']);
+edge.label = 'Hello';
 ```
 
 #### Weighted Edges
@@ -214,6 +219,8 @@ export class WeightedArc extends DirectedEdge {
     this.weight = weight;
   }
 }
+
+const edgeWithWeight = new WeightedArc(7, ['a', 'b']);
 ```
 
 ## Reading

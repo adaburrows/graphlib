@@ -1,4 +1,5 @@
 import {
+  Edge,
   UndirectedEdge,
   DirectedEdge,
   UndirectedHyperedge,
@@ -223,4 +224,22 @@ describe('DirectedHyperedge should', () => {
     expect(E.h).toEqual(nodes2);
   });
 
+});
+
+describe('making a labeled edge with a mixin', () => {
+  it('should work', () => {
+    type EdgeConstructor = new (...args: any[]) => Edge;
+
+    function Labeled<T extends EdgeConstructor>(Base: T) {
+      return class Labeled extends Base {
+        public label: string | null = null;
+      }
+    }
+
+    const ArrowWithLabel = Labeled(DirectedEdge);
+
+    const edge = new ArrowWithLabel(['a', 'b']);
+    edge.label = 'Hello';
+    expect(edge.label).toEqual('Hello');
+  });
 });

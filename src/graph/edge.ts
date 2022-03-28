@@ -194,6 +194,11 @@ export abstract class Hyperedge extends Edge implements IHyperedge {
     }, new Array<VertexKeyType>());
   }
 
+  /**
+   * Returns the size of the hyperedge
+   * Since a hyperedge only uses the first entry of the vertices, this is the
+   * length of that entry.
+   */
   public get size(): number {
     return this.vertices[0].length;
   }
@@ -245,6 +250,11 @@ export class DirectedHyperedge extends Hyperedge {
     this.vertices[1] = v;
   }
 
+  /**
+   * Returns the size of the hyperedge
+   * Since a directed hyperedge uses both entries of the vertices, this is the
+   * sum of the lengths of those entries.
+   */
   public override get size(): number {
     return this.vertices[0].length + this.vertices[1].length;
   }
