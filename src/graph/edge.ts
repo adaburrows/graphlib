@@ -1,5 +1,67 @@
 import {VertexKeyType, VKSetSet, VKSet, VKPair } from './vertex';
 
+/*
+
+After much thought (see docs/summary.md), I think I want to refactor these
+structures differently. I want to create a SimplicalSet<T>. This will allow
+deriving much more complicated structures and types, like a generalized path
+over SimplicalSets.
+
+Eventually, Edge will derrive via SimplicalSet:
+
+class Simplex<T> {
+  public delta: Array<Array<T>>;
+  constructor() {
+    // Placeholder for the actual NArySimplex constructor
+    this.delta = new Array<Array<T>>();
+  }
+}
+
+function MakeSimplex<T>(N: number) {
+  return class NArySimplex extends Simplex<T> {
+    constructor() {
+      super();
+      this.delta = new Array<Array<T>>(N);
+      for (let i = 0; i < N; i++) {
+        this.delta[i] = new Array<T>();
+      }
+    }
+  }
+}
+
+class Path<T> {
+  public simplices: Array<Simplex<T>>;
+  constructor() {
+    this.simplices = new Array<Simplex<T>>();
+  }
+}
+
+const EdgeSimplex = MakeSimplex<VertexKeyType>(1);
+
+const a = new EdgeSimplex();
+a.delta[0] = ['a'];
+a.delta[1] = ['b'];
+
+const b = new EdgeSimplex();
+b.delta[0] = ['b'];
+b.delta[1] = ['c'];
+
+const c = new (MakeSimplex<VertexKeyType>(2))();
+c.delta[0] = ['c'];
+c.delta[1] = ['d'];
+c.delta[2] = ['e'];
+
+const path = new Path<VertexKeyType>();
+path.simplices.concat([a,b,c]);
+
+export class Edge extends EdgeSimplex implements IEdge {}
+
+Additionally, I want to flatten the constructor signatures. No more passing in
+arrays of arrays or unnecessary arrays, it should match the reality of the type
+and what its vertex morphisms accept or return.
+
+*/
+
 /**
  * Interface for edges.
  */
@@ -261,9 +323,8 @@ export class DirectedHyperedge extends Hyperedge {
 
   /**
    * Is the edge a loop?
+   * This is a strict logical AND accumulator.
    * This assumes no key collisions across the whole dataset.
-   * TODO:
-   * Is a directed hyperedge a loop if the second edge is a (sub/super)set of the first edge?
    */
   override get isLoop(): boolean {
     const lengthEqual = this.vertices[0].length === this.vertices[1].length;
@@ -291,6 +352,11 @@ export class DirectedHyperedge extends Hyperedge {
 
     return loop;
   }
+
+  /**
+   * Is the edge a kind of loop? Returns true if the tail and head intersect.
+   */
+  //TODO: add get isLoopOr(): boolean
 
   // Q: Should we write a functor going to mutitple directed edges?
   // Q: Should we write a functor going to undirected hyperedges?
