@@ -85,6 +85,22 @@ export class Graph<VertexType extends Vertex, EdgeType extends Edge> {
   }
 
   /**
+   * Returns the edges that refer to vertex.
+   * @param vertex
+   * @returns
+   */
+  public getVertexEdges(vertex: Vertex | VertexKeyType): EdgeType[] {
+    const key = vertex instanceof Vertex? vertex.key : vertex;
+    let edges = new Array<EdgeType>();
+    for (let edge of this.edges) {
+      if (edge.vertices[0].includes(key) || edge.vertices[1].includes(key)) {
+        edges.push(edge);
+      }
+    }
+    return edges;
+  }
+
+  /**
    * Add an edge
    * TODO: Need to add identity checks on the edges
    * TODO: Need to understand the idea of edge identity in the case of a
