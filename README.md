@@ -225,4 +225,6 @@ const edgeWithWeight = new WeightedArc(7, 'a', 'b');
 
 ## Reading
 
+To [understand more about why the data structures are the way the are, there's the summary](docs/summary.md).
+
 There is [a long list of reading material around graphs and graph algorithms here](docs/reading.md).
