@@ -152,11 +152,46 @@ with an OR.
 
 Finally, what are these?
 
-* directed 1-simplex: [['a','b','c'],['d','e','f']] &mdash; a directed hyperedge
-* directed 2-simplex: [['a','b','c'],['d','e','f'],['g','h','i']] &mdash; is this a chain?
-* directed 3-simplex: [['a','b','c'],['d','e','f'],['g','h','i'],['j','k','l']]
+* 1-simplex: [['a','b','c'],['d','e','f']] &mdash; directed hyperedge
+* 1-simplex: [['a','b','c'],[]] &mdash; undirected hyperedge, but this should
+  probably be glued back to itself [['a','b','c'],[]], [[],['a','b','c']], this
+  would show the nature of an undirected edge corresponding to 2 complementary
+  directed paths in a very general way. What bugs me about this is that when the
+  graph is a 2-uniform hypergraph (or a simple graph), then technically the edges
+  of [['a'],['b']],[['b'],['a']] and [['a','b'],[]],[[],['a','b']] ~are the same~
+  map onto each other. This bugs me less.
+* 2-simplex: [['a','b','c'],['d','e','f'],['g','h','i']] &mdash; I wonder any
+  n>1 n-simplexes should be admitted into the model. This is technically an edge
+  that connects coincidences in a directed fashion across a 2-simplex. It seems
+  meaningless, but maybe I just can't comprehend what that would mean.
+* 3-simplex: [['a','b','c'],['d','e','f'],['g','h','i'],['j','k','l']] &mdash;
+  I'm not even going to try to understand a 3-simplex edge right now.
 
-These a 3-uniform, but they don't have to be.
+OK, after letting my brain marinade in math papers for a few days, I think I know
+what I'm actually doing, sort of:
+
+The edges are paths between simplex sets. I can't quite write out the math for
+this yet, because the specifics are too new to me. But basically there are
+several layers of abstraction. A edge is a mapping between two simplex sets. This
+mapping may form simplicial homology that form an ordering between the simplex
+sets. This gives the flexibility of being to define 0-simplicial complexes which
+can form a simple directed edge or an n-simplex and m-simplex which form a
+directed hyperedge. Additionally, [-1] is allowed as the identity to allow the
+creation of undirected edges where the edge is represented as a simplicial set of
+vertices (almost akin to the point at infinity on a Riemann Sphere). The next
+level is a allowing chains that connect and join paths into a chain complex.
+
+(Paths and chains and edges need to be massaged wording wise)
+
+On the other hand, we could also have the directed versus undirected edges be
+represented by paths and double paths, which mirrors the linear algebra based
+perspective of spectral analysis. When a double path occurs, it makes a boundary
+condition on the path so the boundary operator becomes zero. On the third hand,
+this is somehow more restrictive since without the same structure of the [-1] set
+and the n-simplex representing a hyperedge and it's opposite combined into a
+double edge, an undirected hyperedge becomes more difficult to notate.
+I think I'll carry on with my expiriment and see if I eventually come across a
+good reason to change it.
 
 
 **Papers Mentioning Hyperloops**
@@ -165,6 +200,12 @@ These a 3-uniform, but they don't have to be.
 * [Surana, A., Chen, C., & Rajapakse, I. (2021). Hypergraph dissimilarity measures. arXiv preprint arXiv:2106.08206.](https://arxiv.org/abs/2106.08206)
 
 **Simplical Sets, Nerves, etc.**
+_Easy Overview_
+* [Milewski, B. (2018) Keep it Simplex, Stupid! Bartosz Milewski's Programming Cafe. 11 December.](https://bartoszmilewski.com/2018/12/11/keep-it-simplex-stupid/)
+* [Friedman, G. (2008). An elementary illustrated introduction to simplicial sets. arXiv preprint arXiv:0809.4221.](https://arxiv.org/abs/0809.4221)
+* [Riehl, E. (2011). A leisurely introduction to simplicial sets. Unpublished expository article available online at http://www.math.harvard.edu/~eriehl.](https://emilyriehl.github.io/files/ssets.pdf)
+
+_Jump Right In_
 * [Eilenberg, S., & Zilber, J. A. (1950). Semi-simplicial complexes and singular homology. Annals of Mathematics, 499-513.](https://doi.org/10.2307/1969364)
 * [Segal, G. (1968). Classifying spaces and spectral sequences. Publications Mathématiques de l'IHÉS, 34, 105-112.](http://www.numdam.org/article/PMIHES_1968__34__105_0.pdf)
 * [Segal, G. (1974). Appendix A. Categories and cohomology theories. Topology, 13(3), 293-312.](https://doi.org/10.1016/0040-9383(74)90022-6)
@@ -174,7 +215,19 @@ These a 3-uniform, but they don't have to be.
 * [Blanc, D., Dwyer, W. G., & Goerss, P. G. (2004). The realization space of a Π-algebra: a moduli problem in algebraic topology. Topology, 43(4), 857-892.](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.148.6377&rep=rep1&type=pdf)
 * [Weber, M. (2007). Familial 2-functors and parametric right adjoints. Theory Appl. Categ, 18(22), 665-732.](http://www.tac.mta.ca/tac/volumes/18/22/18-22.pdf)
 * [Moerdijk, I., & Weiss, I. (2007). Dendroidal sets. Algebraic & Geometric Topology, 7(3), 1441-1470.](http://dx.doi.org/10.2140/agt.2007.7.1441)
-* [Friedman, G. (2008). An elementary illustrated introduction to simplicial sets. arXiv preprint arXiv:0809.4221.](https://arxiv.org/abs/0809.4221)
-* [Riehl, E. (2011). A leisurely introduction to simplicial sets. Unpublished expository article available online at http://www.math.harvard.edu/~eriehl.](https://emilyriehl.github.io/files/ssets.pdf)
 * [Allegretti, D. G. (2008). Simplicial Sets and van Kampen’s Theorem. Preprint.](http://www.math.uchicago.edu/~may/VIGRE/VIGRE2008/REUPapers/Allegretti.pdf)
 * [Gelfand, S. I., Manin, Y. I. (2013). Methods of Homological Algebra. Germany: Springer Berlin Heidelberg.](https://www.google.com/books/edition/Methods_of_Homological_Algebra/MIzqCAAAQBAJ?hl=en&gbpv=1&pg=PA6&printsec=frontcover)
+
+**Simplical Sets and Graphs**
+* [Jonsson, J. (2005). Simplicial complexes of graphs (pp. 0283-0283). Kungl. Telniska högskolan.](https://www.diva-portal.org/smash/get/diva2:7886/FULLTEXT01.pdf)
+* [Pal, S. P. (2007). Hypergraphs, Simplicial Complexes and Geometric Graphs CS60035: Special Topics on Algorithms Autumn 2007.](http://www.facweb.iitkgp.ac.in/~spp/geomgraph.pdf)
+* [Spivak, D. I. (2009). Higher-dimensional models of networks. arXiv preprint arXiv:0909.4314.](https://arxiv.org/abs/0909.4314)
+* [Martino, A., & Rizzi, A. (2020). (Hyper) graph kernels over simplicial complexes. Entropy, 22(10), 1155.](https://www.mdpi.com/1099-4300/22/10/1155)
+
+**Paths and Category Theory**
+* [Jardine, J. F. (2006). Categorical homotopy theory. Homology, Homotopy and Applications, 8(1), 71-144.](https://doi.org/10.4310/HHA.2006.v8.n1.a3)
+* [Joyal, A. (2008). Notes on quasi-categories. preprint.](https://www.math.uchicago.edu/~may/IMA/Joyal.pdf)
+* [Jardine, J. F. (2010). Path categories and resolutions. Homology, Homotopy and Applications, 12(2), 231-244.](https://doi.org/10.4310/HHA.2010.v12.n2.a8)
+* [Jardine, J. F. (2019). Path categories and quasi-categories. arXiv preprint arXiv:1909.08419.](https://arxiv.org/abs/1909.08419)
+* [Jardine, J. F. (2019). Complexity reduction for path categories. arXiv preprint arXiv:1909.08433.](https://arxiv.org/abs/1909.08433)
+* [Jardine, J. F. (2019). Data and homotopy types. arXiv preprint arXiv:1908.06323.](https://arxiv.org/abs/1908.06323)
