@@ -85,4 +85,4 @@ will worry about that later when the need arises.
 ### Set Theory Overview
 
 If you would like to read a highly condensed set theory overview of graphs, see
-[Set Theory Overview](docs/set_theory_overview.md).
+[Set Theory Overview](set_theory_overview.md).
