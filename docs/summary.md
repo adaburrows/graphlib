@@ -193,6 +193,35 @@ double edge, an undirected hyperedge becomes more difficult to notate.
 I think I'll carry on with my expiriment and see if I eventually come across a
 good reason to change it.
 
+Ok, I think I actually found what it is I'm looking for. While I was out walking
+earlier, I thought this all reminded me of a Dedekind cut. In fact, it's likely a
+more optimal way to represent the edges without the need for allocating two whole
+simplical sets. What we will do instead is just have a set S where two other sub
+sets are defined:
+* L, U \subset S. L is the lower cut. U is the upper cut.
+* L = { x | x < a }, U = { x | x > a }
+* a \in S
+
+Basically, this lets us devide the edge into two ordered sets. Then we can impose
+the meaning on those two sets of one pointing to the other. Technically, all the
+undirected edges will have one sided Dedekind completions:
+* (\empty, S)
+* (S, \empty)
+
+This will form the basis of the indexing system used to map from the set to the
+vertices.
+
+The we can define a path similarly to a 1-chain of 1-simplcial sets, where it is
+an ordered set of edges (Dedekind completions) with the condition that the sets
+which follow each other must intersect in a particular fashion:
+* A lower cut must map to vertices which intersect with the vertices mapped to
+  by the preceeding edge's upper cut.
+* If either of the sequential edges are one-sided, replace the lower or upper cut
+  with the whole set.
+
+We can then define a boundary operator on this particular notion of a path, but I
+will worry about that later when the need arises.
+
 
 **Papers Mentioning Hyperloops**
 * [Pearson, K. J. (2015). Spectral hypergraph theory of the adjacency hypermatrix and matroids. Linear Algebra and its Applications, 465, 176-187.](https://doi.org/10.1016/j.laa.2014.09.025)
@@ -223,6 +252,11 @@ _Jump Right In_
 * [Pal, S. P. (2007). Hypergraphs, Simplicial Complexes and Geometric Graphs CS60035: Special Topics on Algorithms Autumn 2007.](http://www.facweb.iitkgp.ac.in/~spp/geomgraph.pdf)
 * [Spivak, D. I. (2009). Higher-dimensional models of networks. arXiv preprint arXiv:0909.4314.](https://arxiv.org/abs/0909.4314)
 * [Martino, A., & Rizzi, A. (2020). (Hyper) graph kernels over simplicial complexes. Entropy, 22(10), 1155.](https://www.mdpi.com/1099-4300/22/10/1155)
+
+**Dedekind Cuts, Dedekind Completions**
+* [nLab. Dedekind cut.](https://ncatlab.org/nlab/show/Dedekind+cut)
+* [nLab. Dedekind completion.](https://ncatlab.org/nlab/show/Dedekind%20completion)
+* [Fornasiero, A., & Mamino, M. (2008). Arithmetic of Dedekind cuts of ordered Abelian groups. Annals of Pure and Applied Logic, 156(2-3), 210-244.](https://arxiv.org/abs/math/0612235v3)
 
 **Paths and Category Theory**
 * [Jardine, J. F. (2006). Categorical homotopy theory. Homology, Homotopy and Applications, 8(1), 71-144.](https://doi.org/10.4310/HHA.2006.v8.n1.a3)
