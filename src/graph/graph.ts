@@ -93,7 +93,7 @@ export class Graph<VertexType extends Vertex, EdgeType extends Edge> {
     const key = vertex instanceof Vertex? vertex.key : vertex;
     let edges = new Array<EdgeType>();
     for (let edge of this.edges) {
-      if (edge.vertices[0].includes(key) || edge.vertices[1].includes(key)) {
+      if (edge.vertices.S.includes(key)) {
         edges.push(edge);
       }
     }

@@ -40,7 +40,7 @@ describe('The Graph Object', () => {
   test('should allow undirected edges', () => {
     const graph = new Graph<Datum, Edge>();
     graph.addVertices(data);
-    const edge = new UndirectedEdge([data[1].key, data[2].key]);
+    const edge = new UndirectedEdge(data[1].key, data[2].key);
     graph.addEdge(edge);
     expect(graph.size).toEqual(1);
   });
@@ -48,7 +48,7 @@ describe('The Graph Object', () => {
   test('should allow directed edges', () => {
     const graph = new Graph<Datum, Edge>();
     graph.addVertices(data);
-    const edge = new DirectedEdge([data[1].key, data[2].key]);
+    const edge = new DirectedEdge(data[1].key, data[2].key);
     graph.addEdge(edge);
     expect(graph.size).toEqual(1);
   });
@@ -75,9 +75,9 @@ describe('The Graph Object', () => {
     graph.addVertices(data);
 
     // Add edges
-    const undirectedEdge = new UndirectedEdge([data[1].key, data[2].key]);
+    const undirectedEdge = new UndirectedEdge(data[1].key, data[2].key);
     graph.addEdge(undirectedEdge);
-    const directedEdge = new DirectedEdge([data[1].key, data[2].key]);
+    const directedEdge = new DirectedEdge(data[1].key, data[2].key);
     graph.addEdge(directedEdge);
     const undirectedHyperedge = new UndirectedHyperedge([data[1].key, data[2].key]);
     graph.addEdge(undirectedHyperedge);
@@ -137,7 +137,7 @@ describe('A graph using NoLoops', () => {
     // Setup graph and add data
     const graph = new SimpleGraphNoLoops();
     graph.addVertices(data);
-    const undirectedEdge = new UndirectedEdge([data[1].key, data[1].key]);
+    const undirectedEdge = new UndirectedEdge(data[1].key, data[1].key);
     expect(() => {
       graph.addEdge(undirectedEdge);
     }).toThrow("A loop was detected in the data and the current graph disallows loops.");

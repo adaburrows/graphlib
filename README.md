@@ -179,13 +179,13 @@ To create a labeled edge, simply derive a child class that has a label:
 export class LabeledArrow extends DirectedEdge {
   public label: string;
 
-  constructor(label: string, ...vertex_pair:VertexPair) {
-    super(vertex_pair);
+  constructor(label: string, t:VertexKeyType, h: VertexKeyType) {
+    super(t, h);
     this.label = label;
   }
 }
 
-const aSaysHelloToB = new LabeledArrow('Hello', ['a', 'b']);
+const aSaysHelloToB = new LabeledArrow('Hello', 'a', 'b');
 ```
 
 While it would be possible to create a mixin, the mixin wouldn't be able to change
@@ -202,7 +202,7 @@ function Labeled<T extends EdgeConstructor>(Base: T) {
 
 const ArrowWithLabel = Labeled(DirectedEdge);
 
-const edge = new ArrowWithLabel(['a', 'b']);
+const edge = new ArrowWithLabel('a', 'b');
 edge.label = 'Hello';
 ```
 
@@ -214,13 +214,13 @@ To create a weighted edge, simply derive a child class that has a weight:
 export class WeightedArc extends DirectedEdge {
   public weight: number;
 
-  constructor(weight: string, ...vertex_pair:VertexPair) {
-    super(vertex_pair);
+  constructor(weight: string, t:VertexKeyType, h: VertexKeyType) {
+    super(t, h);
     this.weight = weight;
   }
 }
 
-const edgeWithWeight = new WeightedArc(7, ['a', 'b']);
+const edgeWithWeight = new WeightedArc(7, 'a', 'b');
 ```
 
 ## Reading

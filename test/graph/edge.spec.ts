@@ -16,36 +16,36 @@ break anything.
 
 describe('UndirectedEdge should accept a vertex key pair and', () => {
   it ('should return the first element with the x morphism', () => {
-    const E = new UndirectedEdge(['A', 'B']);
+    const E = new UndirectedEdge('A', 'B');
     expect(E.x).toEqual('A');
   });
 
   it('should set the first element with the x setter', () => {
-    const E = new UndirectedEdge(['A', 'B']);
+    const E = new UndirectedEdge('A', 'B');
     E.x = 'C';
     expect(E.x).toEqual('C');
   });
 
   it('should return the second element with the y morphism', () => {
-    const E = new UndirectedEdge(['A', 'B']);
+    const E = new UndirectedEdge('A', 'B');
     expect(E.y).toEqual('B');
   });
 
   it('should set the second element with the y setter', () => {
-    const E = new UndirectedEdge(['A', 'B']);
+    const E = new UndirectedEdge('A', 'B');
     E.y = 'C';
     expect(E.y).toEqual('C');
   });
 
   it('should indicate if the edge is a loop', () => {
-    const E = new UndirectedEdge(['A', 'A']);
-    const F = new UndirectedEdge([1,1]);
+    const E = new UndirectedEdge('A', 'A');
+    const F = new UndirectedEdge(1,1);
     expect(E.isLoop).toEqual(true);
     expect(F.isLoop).toEqual(true);
   });
 
   it('should map to a right oriented directed edge', () => {
-    const E = new UndirectedEdge(['A', 'B']);
+    const E = new UndirectedEdge('A', 'B');
     const D = E.toRight();
     expect(D instanceof DirectedEdge).toEqual(true);
     expect(D.t).toEqual('A');
@@ -53,7 +53,7 @@ describe('UndirectedEdge should accept a vertex key pair and', () => {
   });
 
   it('should map to a left oriented directed edge', () => {
-    const E = new UndirectedEdge(['A', 'B']);
+    const E = new UndirectedEdge('A', 'B');
     const D = E.toLeft();
     expect(D instanceof DirectedEdge).toEqual(true);
     expect(D.t).toEqual('B');
@@ -61,7 +61,7 @@ describe('UndirectedEdge should accept a vertex key pair and', () => {
   });
 
   it('should map to a right oriented directed edge', () => {
-    const E = new UndirectedEdge(['A', 'B']);
+    const E = new UndirectedEdge('A', 'B');
     const D = E.toRightHyperedge();
     expect(D instanceof DirectedHyperedge).toEqual(true);
     expect(D.t).toEqual(['A']);
@@ -69,7 +69,7 @@ describe('UndirectedEdge should accept a vertex key pair and', () => {
   });
 
   it('should map to a left oriented directed hyperedge', () => {
-    const E = new UndirectedEdge(['A', 'B']);
+    const E = new UndirectedEdge('A', 'B');
     const D = E.toLeftHyperedge();
     expect(D instanceof DirectedHyperedge).toEqual(true);
     expect(D.t).toEqual(['B']);
@@ -77,45 +77,46 @@ describe('UndirectedEdge should accept a vertex key pair and', () => {
   });
 
   it('should map to a hyperedge', () => {
-    const E = new UndirectedEdge(['A', 'B']);
+    const E = new UndirectedEdge('A', 'B');
     const D = E.toUndirectedHyperedge();
     expect(D instanceof UndirectedHyperedge).toEqual(true);
-    expect(D.vertices[0]).toEqual(['A','B']);
+    expect(D.vertices.S).toEqual(['A','B']);
+    expect(D.vertices.L).toEqual(['A','B']);
   });
 });
 
 describe('DirectedEdge should accept a vertex pair and', () => {
   it('should return the head element with the h morphism', () => {
-    const E = new DirectedEdge(['A', 'B']);
+    const E = new DirectedEdge('A', 'B');
     expect(E.h).toEqual('B');
   });
 
   it('should set the head element with the h setter', () => {
-    const E = new DirectedEdge(['A', 'B']);
+    const E = new DirectedEdge('A', 'B');
     E.h = 'C';
     expect(E.h).toEqual('C');
   });
 
   it('should return the tail element with the t morphism', () => {
-    const E = new DirectedEdge(['A', 'B']);
+    const E = new DirectedEdge('A', 'B');
     expect(E.t).toEqual('A');
   });
 
   it('should set the tail element with the t setter', () => {
-    const E = new DirectedEdge(['A', 'B']);
+    const E = new DirectedEdge('A', 'B');
     E.t = 'C';
     expect(E.t).toEqual('C');
   });
 
   it('should indicate if the edge is a loop', () => {
-    const E = new DirectedEdge(['A', 'A']);
-    const F = new DirectedEdge([1,1]);
+    const E = new DirectedEdge('A', 'A');
+    const F = new DirectedEdge(1,1);
     expect(E.isLoop).toEqual(true);
     expect(F.isLoop).toEqual(true);
   });
 
   it('should map to a directed hyperedge', () => {
-    const E = new DirectedEdge(['A', 'B']);
+    const E = new DirectedEdge('A', 'B');
     const D = E.toDirectedHyperedge();
     expect(D instanceof DirectedHyperedge).toEqual(true);
     expect(D.t).toEqual(['A']);
@@ -123,7 +124,7 @@ describe('DirectedEdge should accept a vertex pair and', () => {
   });
 
   it('should map to an undirected edge', () => {
-    const E = new DirectedEdge(['A', 'B']);
+    const E = new DirectedEdge('A', 'B');
     const D = E.toUndirectedEdge();
     expect(D instanceof UndirectedEdge).toEqual(true);
     expect(D.x).toEqual('A');
@@ -238,7 +239,7 @@ describe('making a labeled edge with a mixin', () => {
 
     const ArrowWithLabel = Labeled(DirectedEdge);
 
-    const edge = new ArrowWithLabel(['a', 'b']);
+    const edge = new ArrowWithLabel('a', 'b');
     edge.label = 'Hello';
     expect(edge.label).toEqual('Hello');
   });
