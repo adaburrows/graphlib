@@ -24,12 +24,12 @@
     "watch": "parcel watch",
     "build": "parcel build",
     "clean": "rm -rf ./dist",
-    "lint": "npx eslint . --ignore-path .gitignore --ext .ts",
+    "lint": "eslint . --ignore-path .gitignore --ext .ts",
     "check": "tsc --noEmit",
-    "lint:fix": "npm run lint -- --fix",
-    "test": "npx jest",
-    "test:ci": "npm test",
-    "test:watch": "npm test -- --watch --verbose"
+    "lint:fix": "pnpm run lint -- --fix",
+    "test": "jest",
+    "test:ci": "pnpm test",
+    "test:watch": "pnpm test -- --watch --verbose"
   },
   "repository": {
     "type": "git",
