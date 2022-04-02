@@ -86,3 +86,6 @@ will worry about that later when the need arises.
 
 If you would like to read a highly condensed set theory overview of graphs, see
 [Set Theory Overview](set_theory_overview.md).
+
+If you would like to learn more about the connections between graphs and linear
+algebra, see the page on [Linear Algebra](linear_algebra.md).
