@@ -4,6 +4,18 @@
 export type VertexKeyType = number | string | symbol;
 
 /**
+ * Computes the intersection of two arrays of vertices.
+ *
+ * @param a
+ * @param b
+ * @returns Array<VertexKeyType>
+ */
+export function intersection(a: Array<VertexKeyType>, b: Array<VertexKeyType>): Array<VertexKeyType> {
+  const setB = new Set<VertexKeyType>(b);
+  return [...new Set<VertexKeyType>(a)].filter(x => setB.has(x));
+}
+
+/**
  * Vertex Interface
  */
 export interface IVertex {

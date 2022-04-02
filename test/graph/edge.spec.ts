@@ -83,6 +83,20 @@ describe('UndirectedEdge should accept a vertex key pair and', () => {
     expect(D.vertices.S).toEqual(['A','B']);
     expect(D.vertices.L).toEqual(['A','B']);
   });
+
+  it('should determine that two adjacent edges can connect to each other', () => {
+    const E1 = new UndirectedEdge('A', 'B');
+    const E2 = new UndirectedEdge('B', 'C');
+    expect(E1.connectsTo(E2)).toEqual(true);
+    expect(E2.connectsTo(E1)).toEqual(true);
+  });
+
+  it('should determine that two non-adjacent edges cannot connect to each other', () => {
+    const E1 = new UndirectedEdge('A', 'B');
+    const E2 = new UndirectedEdge('C', 'D');
+    expect(E1.connectsTo(E2)).toEqual(false);
+    expect(E2.connectsTo(E1)).toEqual(false);
+  });
 });
 
 describe('DirectedEdge should accept a vertex pair and', () => {
@@ -130,6 +144,20 @@ describe('DirectedEdge should accept a vertex pair and', () => {
     expect(D.x).toEqual('A');
     expect(D.y).toEqual('B');
   });
+
+  it('should determine that two adjacent edges can connect to each other', () => {
+    const E1 = new DirectedEdge('A', 'B');
+    const E2 = new DirectedEdge('B', 'C');
+    expect(E1.connectsTo(E2)).toEqual(true);
+    expect(E2.connectsTo(E1)).toEqual(false); // Directed edges don't connect that way
+  });
+
+  it('should determine that two non-adjacent edges cannot connect to each other', () => {
+    const E1 = new DirectedEdge('A', 'B');
+    const E2 = new DirectedEdge('C', 'D');
+    expect(E1.connectsTo(E2)).toEqual(false);
+    expect(E2.connectsTo(E1)).toEqual(false);
+  });
 });
 
 describe('UndirectedHyperedge', () => {
@@ -143,6 +171,20 @@ describe('UndirectedHyperedge', () => {
     const nodes = ['A', 'A'];
     const E = new UndirectedHyperedge(nodes);
     expect(E.isLoop).toEqual(true);
+  });
+
+  it('should determine that two adjacent edges can connect to each other', () => {
+    const E1 = new UndirectedHyperedge(['A', 'B']);
+    const E2 = new UndirectedHyperedge(['B', 'C']);
+    expect(E1.connectsTo(E2)).toEqual(true);
+    expect(E2.connectsTo(E1)).toEqual(true);
+  });
+
+  it('should determine that two non-adjacent edges cannot connect to each other', () => {
+    const E1 = new UndirectedHyperedge(['A', 'B']);
+    const E2 = new UndirectedHyperedge(['D', 'C']);
+    expect(E1.connectsTo(E2)).toEqual(false);
+    expect(E2.connectsTo(E1)).toEqual(false);
   });
 });
 
@@ -220,11 +262,33 @@ describe('DirectedHyperedge should', () => {
     const nodes1 = ['A', 'B'];
     const nodes2 = ['A', 'B', 'C'];
     const E = new DirectedHyperedge(nodes1, nodes2);
-    expect(E.isLoop).toEqual(false);
+    expect(E.isLoop).toEqual(true);
     expect(E.t).toEqual(nodes1);
     expect(E.h).toEqual(nodes2);
   });
 
+  it('should indicate if the size 5 edge is not a loop', () => {
+    const nodes1 = ['A', 'B'];
+    const nodes2 = ['A', 'B', 'C'];
+    const E = new DirectedHyperedge(nodes1, nodes2);
+    expect(E.isLoopStrict).toEqual(false);
+    expect(E.t).toEqual(nodes1);
+    expect(E.h).toEqual(nodes2);
+  });
+
+  it('should determine that two adjacent edges can connect to each other', () => {
+    const E1 = new DirectedHyperedge(['A', 'B'], ['C', 'D']);
+    const E2 = new DirectedHyperedge(['D', 'E'], ['F', 'G']);
+    expect(E1.connectsTo(E2)).toEqual(true);
+    expect(E2.connectsTo(E1)).toEqual(false); // Directed edges can't connect this way
+  });
+
+  it('should determine that two non-adjacent edges cannot connect to each other', () => {
+    const E1 = new DirectedHyperedge(['A', 'B'], ['C', 'D']);
+    const E2 = new DirectedHyperedge(['F', 'E'], ['H', 'G']);
+    expect(E1.connectsTo(E2)).toEqual(false);
+    expect(E2.connectsTo(E1)).toEqual(false);
+  });
 });
 
 describe('making a labeled edge with a mixin', () => {

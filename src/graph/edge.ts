@@ -1,4 +1,4 @@
-import { VertexKeyType, VKSet } from './vertex';
+import { VertexKeyType, VKSet, intersection } from './vertex';
 import { DedekindCompletion } from './dedekind';
 
 /**
@@ -28,6 +28,15 @@ export abstract class Edge implements IEdge{
 
   get isLoop(): boolean {
     throw Error("isLoop() not implemented");
+  }
+
+  /**
+   * Determines if an edge leads to another edge.
+   */
+  public connectsTo(next: Edge) {
+    const a = this.vertices.oneSided ? this.vertices.S : this.vertices.U;
+    const b = next.vertices.oneSided ? next.vertices.S : next.vertices.L;
+    return (intersection(a,b)).length > 0;
   }
 }
 
@@ -178,16 +187,7 @@ export abstract class Hyperedge extends Edge implements IHyperedge {
    * Remove duplicates in `Hyperedge` `VKSet`s.
    */
   protected unique(vertices: VKSet): VKSet {
-    return vertices.reduce<VKSet>((accum: VKSet, vertex: VertexKeyType): VKSet => {
-      if(accum.length) {
-        if(accum[0] != vertex) {
-          accum.push(vertex);
-        }
-      } else {
-        accum.push(vertex)
-      }
-      return accum;
-    }, new Array<VertexKeyType>());
+    return [...new Set<VertexKeyType>(vertices)];
   }
 
   /**
@@ -256,41 +256,23 @@ export class DirectedHyperedge extends Hyperedge {
   }
 
   /**
-   * Is the edge a loop?
-   * This is a strict logical AND accumulator.
+   * Is the edge a kind of loop? Returns true if the tail and head intersect.
+   * This is a logical OR accumulator.
    * This assumes no key collisions across the whole dataset.
    */
   override get isLoop(): boolean {
-    const lengthEqual = this.vertices.L.length === this.vertices.U.length;
-
-    // Initialize accumulator with initial check result
-    let loop = lengthEqual;
-
-    // Shortcut the longer check if false
-    if (loop) {
-      // Make shallow copies of the vertex sets
-      let t = [...this.t];
-      let h = [...this.h];
-
-      // Check for membership in the other set
-      for (let e of t) {
-        const i = h.indexOf(e);
-        if (i > 0) {
-          loop &&= true;
-
-          // If it's found, remove it from the copy so there's fewer to compare next time around.
-          h.splice(i, 1);
-        }
-      }
-    }
-
-    return loop;
+    return intersection(this.vertices.L, this.vertices.U).length > 0;
   }
 
   /**
    * Is the edge a kind of loop? Returns true if the tail and head intersect.
+   * This is a strict logical AND accumulator.
+   * This assumes no key collisions across the whole dataset.
    */
-  //TODO: add get isLoopOr(): boolean
+  get isLoopStrict(): boolean {
+    let intersectLength = intersection(this.vertices.L, this.vertices.U).length;
+    return (intersectLength == this.vertices.L.length) && (intersectLength == this.vertices.U.length);
+  }
 
   // Q: Should we write a functor going to mutitple directed edges?
   // Q: Should we write a functor going to undirected hyperedges?
