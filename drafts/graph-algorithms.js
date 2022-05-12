@@ -102,19 +102,6 @@ the JS to manage events on any of the components in the graph.
 
 
 /**
- * Finds the rank of the adjacency matrix
- * 
- * Assumes graph nodes are numbered from 1 to N
- * Assumes gaps in the numbering sequence are intentional
- * 
- * @param {*} graph 
- * @returns 
- */
-function find_n(graph) {
-    return graph.reduce((p,c) => Math.max(p, c[0], c[1]), 0);
-}
-
-/**
  * Creates a map between a more expansive graph and a simplified graph
  * 
  * @param {*} graph 
@@ -165,38 +152,6 @@ function adjacency_matrix_with_index(graph, index) {
         adjacency[index.indexOf(i)][index.indexOf(j)] = 1;
     }
     return adjacency;
-}
-
-/**
- * Returns the first node the provided node has edges pointing to, if there is one.
- * 
- * @param i 
- * @param graph
- * @returns null | Number
- */
-function next_one(i, graph) {
-    return graph.reduce(function(accumulator, edge) {
-        if (edge[0] == i){
-            accumulator = edge[1];
-        }
-        return accumulator;
-    }, null);
-}
-
-/**
- * Returns the first node with an edge pointing to the provided node if there is one.
- * 
- * @param i 
- * @param graph
- * @returns null | Number
- */
- function prev_one(i, graph) {
-    return graph.reduce(function(accumulator, edge) {
-        if (edge[1] == i){
-            accumulator = edge[0];
-        }
-        return accumulator;
-    }, null);
 }
 
 /**
@@ -607,10 +562,7 @@ const G_line = [[1, 2], [2, 3], [3, 4], [4, 5]];
 console.log(N, A, G, G_merge_4_6, G_rule1, G_rule2, G_rule3, G1, G2, G3, G4, G_line);
 
 
-console.log(N === find_n(G));
 console.log(adjacency_matrix(G)); // should equal A
-console.log(4 === next_one(1, G));
-console.log(2 === prev_one(5, G));
 console.log([13, 14].values === next_set(12, G).values);
 console.log([25, 26, 27, 28].values === prev_set(29 ,G).values);
 console.log(2 === out_edges(12, G));
