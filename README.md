@@ -1,7 +1,10 @@
 # Graphlib
 
-A typed graph library taking inspiration from category theory. This is very much
-a work in progress, but has some basic capabilities already.
+A typed graph library taking inspiration from category theory. This is a fairly
+complete implementation of the graph structures, but it's still missing the
+ability to quickly traverse the graphs. It's also missing some of the searching
+and querying ability a fully featured library should have. All of it is comming
+soon.
 
 For a basic summary of how this library conceptualizes graphs, [please read the summary](docs/summary.md).
 
